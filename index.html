@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>go/codegolf benchmark</title>
+<meta name="description" content="go/codegolf benchmark: frontier models vs. Google's 2015 code golfers.">
+<meta name="data-url" content="data.json?v=b3cc353f0000">
+<link rel="stylesheet" href="style.css?v=d1d5a523ebc9">
+<noscript><style>.loading{display:none}</style></noscript>
+<script>(function(){var t=null;try{t=localStorage.getItem("theme")}catch(e){}if(t!=="light"&&t!=="dark"){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.setAttribute("data-theme",t)})();</script>
+</head>
+<body>
+<header class="site-header">
+<div class="header-inner">
+<a class="site-title" href="#leaderboard">go/codegolf benchmark</a>
+<nav class="site-nav" aria-label="Main">
+<a href="#leaderboard" data-page="leaderboard" aria-current="page">Leaderboard</a>
+<a href="#problems" data-page="problems">Problems</a>
+<a href="#about" data-page="about">About</a>
+<a href="#why" data-page="why">Why Code Golf</a>
+</nav>
+<button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to dark theme">☾</button>
+</div>
+</header>
+<main>
+<section id="page-leaderboard" class="page">
+<h1 class="tagline">go/codegolf benchmark: frontier models vs. Google's 2015 code golfers.</h1>
+<p class="stats">32 problems · 8 languages · 256 cells</p>
+<div class="page-content"><p class="loading">Loading…</p><noscript>This page needs JavaScript.</noscript></div>
+</section>
+<section id="page-problems" class="page" hidden>
+<h1>Problems</h1>
+<div class="page-content"><p class="loading">Loading…</p><noscript>This page needs JavaScript.</noscript></div>
+</section>
+<section id="page-about" class="page prose" hidden>
+<h1>About</h1>
+<blockquote>
+<p><strong>TL;DR:</strong> I brought back 32 problems from a code-golf contest we played at Google in 2015 to see how frontier models
+compare with our old records. Each model gets 30 minutes per problem in each of eight languages to make its solution
+as short as it can. The leaderboard scores the byte counts, not just whether the code works.</p>
+</blockquote>
+<nav class="page-toc" aria-label="Contents"><p class="toc-title">Contents</p><ol><li><a href="#about/where-the-problems-come-from-go-codegolf">Where the problems come from: go/codegolf</a></li><li><a href="#about/from-a-weekly-contest-to-a-benchmark">From a weekly contest to a benchmark</a></li><li><a href="#about/the-eight-languages">The eight languages</a></li><li><a href="#about/how-models-play">How models play</a></li><li><a href="#about/known-best-and-the-oracle">Known Best and the oracle</a></li><li><a href="#about/scoring">Scoring</a></li><li><a href="#about/technical-details">Technical details</a></li><li><a href="#about/why-no-anthropic-models">Why no Anthropic models?</a></li><li><a href="#about/why-i-built-this">Why I built this</a></li></ol></nav><h2 id="about-where-the-problems-come-from-go-codegolf"><a href="#about/where-the-problems-come-from-go-codegolf">Where the problems come from: go/codegolf</a></h2>
+<p>In 2015, when I was at Google, I spent a lot of time on an internal site called <strong>go/codegolf</strong>. There was one problem
+a week, and we competed to write the shortest program that solved it. Most of the regulars were code-golf enthusiasts.</p>
+<p>Each problem went through three phases:</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1. Candidate</strong></td>
+<td>Any Googler could propose a problem by posting a statement and a full test suite. Everyone could read the tests and suggest fixes. Votes were called <em>LGTMs</em>; the candidate with the most LGTMs became the next week's problem.</td>
+</tr>
+<tr>
+<td><strong>2. Competition (7 days)</strong></td>
+<td>You could see your own submissions, but nobody else's. Only your shortest passing solution in each language counted. The per-language scoreboards showed sizes, not code. The problem's author could compete too.</td>
+</tr>
+<tr>
+<td><strong>3. Challenge (forever after)</strong></td>
+<td>After seven days, the rankings froze and every submission became visible to everyone on the site. You could still submit a challenge, but it had to be strictly shorter than both the winning solution and every earlier challenge entry in that language. A passing challenge got its own slot on the scoreboard, with its code visible too.</td>
+</tr>
+</tbody>
+</table>
+<p>The rule was simple: <strong>the shortest program that passed every test case won</strong>. Undefined behavior, compiler quirks,
+non-standard library features, even hardcoding every test case were all allowed. Apart from passing the tests, the
+program only had to be <strong>deterministic</strong>.</p>
+<p>The site supported JavaScript, Python, Go, C++ and Haskell in 2015. Rust was added after I left.</p>
+<h2 id="about-from-a-weekly-contest-to-a-benchmark"><a href="#about/from-a-weekly-contest-to-a-benchmark">From a weekly contest to a benchmark</a></h2>
+<p>I kept a collection of problems from the 2015 contest and chose <strong>32 of them</strong> for this benchmark. I wrote about half
+under the name @binjin. The Problems page credits the original author of each of the others.</p>
+<p>I also archived the scoreboards, statements and test cases. For JavaScript, Python, C++ and Haskell, those scoreboards
+record the <strong>shortest solution any Googler submitted</strong>, including improvements made during the challenge phase.
+Those byte counts are the human records used here. <strong>The human solutions themselves are never shown on this site.</strong></p>
+<p>Eleven years later, I wanted to see how frontier models would do against the people I used to golf with.</p>
+<h2 id="about-the-eight-languages"><a href="#about/the-eight-languages">The eight languages</a></h2>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th>Why it's here</th>
+<th>Human record</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JavaScript</td>
+<td>Original 2015 language</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>Python</td>
+<td>Original 2015 language</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>C++</td>
+<td>Original 2015 language</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>Haskell</td>
+<td>Original 2015 language</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>Ruby</td>
+<td>A popular golfing language with plenty of ways to save a byte</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Raku (Perl 6)</td>
+<td>Another golfing favorite, with a different programming style and just as much room to explore</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Racket</td>
+<td>A Lisp: what does golfing look like in prefix notation?</td>
+<td>—</td>
+</tr>
+<tr>
+<td>GolfScript</td>
+<td>An esoteric, stack-based golfing language with very little public training data</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>There are no 2015 human records for the last four languages. I used an oracle run to get a reference size for each cell,
+though models have beaten those sizes in some cells. Later, I ran the oracle on the original four languages as well,
+this time starting from the human records. See <a href="#about/known-best-and-the-oracle">Known Best and the oracle</a>.</p>
+<h2 id="about-how-models-play"><a href="#about/how-models-play">How models play</a></h2>
+<p>A <strong>cell</strong> is one problem in one language. Each gets a fresh session with a <strong>30-minute wall-clock limit</strong>. The model
+receives the statement, the I/O specification, <strong>all the test cases</strong> and a short guide to the language. For GolfScript,
+it also gets the full language reference, since the language is small and not widely known.</p>
+<p>There are two tools:</p>
+<ul>
+<li><strong><code>submit</code></strong> runs a solution against all the test cases in the replicated sandbox.
+<ul>
+<li>A passing solution is saved only if it is strictly shorter than the model's previous best.</li>
+<li>Wrong answers, runtime errors, timeouts and compile errors are returned with stderr.</li>
+<li>Every response includes the <strong>current best known size</strong>. I want the model to know when someone has done better;
+without a target, it's easy to decide a solution is short enough and stop.</li>
+</ul>
+</li>
+<li><strong><code>playground</code></strong> runs a complete program in Python, Ruby, Raku or GolfScript, using the same sandbox as submissions.
+<ul>
+<li>It can preload the test cases as <code>inputs</code> and <code>outputs</code>, so the model can try its <code>g</code> on every case, compare the
+results with the expected outputs, or just examine the data.</li>
+<li>It's useful for trying a language feature or checking what the interpreter does with an edge case.</li>
+<li>It also lets the model write search programs: for example, to brute-force a magic number or find the shortest
+expression for a small formula. Human golfers do this all the time.</li>
+</ul>
+</li>
+</ul>
+<p>That's all the model gets. There is no internet, shell or access to other files.</p>
+<p>For the four original languages, <strong>the sandbox reproduces the 2015 environment</strong>, down to the compiler or interpreter
+version, flags and quirks. A trick that worked in the old contest should work here; a feature added since then won't.
+The full runtime list is in <a href="#about/technical-details">Technical details</a>.</p>
+<h2 id="about-known-best-and-the-oracle"><a href="#about/known-best-and-the-oracle">Known Best and the oracle</a></h2>
+<p>Without human records for Ruby, Raku, Racket and GolfScript, I needed another way to set a target for the models and a
+reference for scoring. I ran GPT-6 Astra as an <strong>oracle</strong>, giving it every JavaScript, Python, C++ and Haskell solution
+in the benchmark: the shortest human solution for each cell and all the models' solutions. It also had internet access
+and <strong>no time or request limits</strong>.</p>
+<p>I first used the oracle to find reference sizes for the four added languages. Later I ran it on the original four too,
+where it could work directly from the human records and try to improve them.</p>
+<ul>
+<li>The oracle is <strong>unranked</strong>; it only supplies best-known sizes.</li>
+<li>When it beats every competitor in a cell, the Problems page shows its byte count as <strong>Known Best</strong>, but never its code.</li>
+<li>Even the leading model scores below 100% in every language. The oracle had much more time and information to work with.</li>
+</ul>
+<h2 id="about-scoring"><a href="#about/scoring">Scoring</a></h2>
+<p>Each cell is scored by comparing its byte count with the best known:</p>
+<p><strong>score = (best known size ÷ your size)²</strong></p>
+<ul>
+<li>Match the best known size and you get <strong>100%</strong>. A solution 10% longer gets <strong>82.6%</strong>; twice as long gets <strong>25%</strong>.</li>
+<li>An unsolved cell gets <strong>0</strong>.</li>
+<li><strong>Original</strong> averages the 128 cells in JavaScript, Python, C++ and Haskell, the languages with human records.
+<strong>Extended</strong> averages the other 128 cells, in Ruby, Raku, Racket and GolfScript. Humans have no Extended score because
+they have no entries in those languages, so the leaderboard sorts by Original by default.</li>
+<li>The best known size can come from a human, a model or the oracle. If anyone finds a shorter solution, everyone else's
+score for that cell goes down.</li>
+<li>To score 100% across a whole run, you have to match the best known size in every cell.</li>
+</ul>
+<p>A gold mark on a problem's scoreboard means that solution matches the best known size. A filled mark means no other
+competitor has matched it; an outlined mark means a tie. Humans count as competitors, but the oracle doesn't. If the
+oracle's Known Best is shorter than every competitor's solution, nobody gets a gold mark.</p>
+<h2 id="about-technical-details"><a href="#about/technical-details">Technical details</a></h2>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th>Runtime</th>
+<th>Time limit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JavaScript</td>
+<td>Rhino 1.7R4, JavaScript 1.7 (problems 01–19) / Rhino 1.7.7, partial ES6 (20–32)</td>
+<td>20 s</td>
+</tr>
+<tr>
+<td>Python</td>
+<td>PyPy 2.3.1 (Python 2.7.6) in the RPython sandbox, no JIT, restricted imports</td>
+<td>10 s</td>
+</tr>
+<tr>
+<td>C++</td>
+<td>PNaCl clang 3.5.0 (Pepper 41), <code>-std=gnu++11 -stdlib=libc++ -O2 -w -Werror=c++1z-extensions</code></td>
+<td>10 s</td>
+</tr>
+<tr>
+<td>Haskell</td>
+<td>GHC 7.8.4, evaluated through mueval 0.9.1.1.1 (hint 0.4.2.2)</td>
+<td>10 s</td>
+</tr>
+<tr>
+<td>Ruby</td>
+<td>MRI/CRuby 3.4.10 with the Prism parser and YJIT enabled</td>
+<td>10 s</td>
+</tr>
+<tr>
+<td>Raku</td>
+<td>Rakudo / MoarVM 2026.08</td>
+<td>10 s</td>
+</tr>
+<tr>
+<td>Racket</td>
+<td>Racket CS 9.3</td>
+<td>10 s</td>
+</tr>
+<tr>
+<td>GolfScript</td>
+<td>Reference interpreter (<a href="https://github.com/darrenks/golfscript">darrenks/golfscript</a> <code>cded542</code>), with the Ruby-eval string interpolation removed</td>
+<td>20 s</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Function, not program.</strong> You define a function <code>g</code>. A wrapper calls it on every test case and prints the results;
+the wrapper doesn't count towards your size. For Haskell, it also supplies <code>g</code>'s type signature. The solution is the
+body of a <code>let</code> binding, and mueval evaluates the whole thing as one expression.</li>
+<li><strong>State between test cases.</strong> JavaScript, Python, Raku and Racket run every test case in one process, so global state persists from one case to the next (Haskell is pure). C++ compiles the solution inside a struct that is created fresh for each test case, so its &quot;global&quot; variables start at zero every time; only <code>static</code> ones persist. Ruby runs each test case in its own fresh environment. GolfScript runs the program's top level once and then each test case in a fresh copy of that state, so precomputed values are shared but nothing a case changes carries over.</li>
+<li><strong>Bytes, not characters.</strong> The score uses the raw file size. Spaces, newlines and every byte of a multi-byte UTF-8 character count.</li>
+<li><strong>Deterministic.</strong> Each submission runs twice, independently. Both stdout and stderr must match exactly before the output is judged.</li>
+<li><strong>Shuffled inputs.</strong> Each run gets its own random ordering of the test cases. The judge puts the results back in the original order before checking them, so a solution can't rely on the order of the inputs.</li>
+<li><strong>One time limit per run.</strong> Compilation and the full batch of test cases must fit within the same time limit.</li>
+<li><strong>JavaScript.</strong> Problems 01–19 run on Rhino 1.7R4 (JavaScript 1.7, interpreted mode at optimization level -1, stack depth 4096). Problems 20–32 run on Rhino 1.7.7 (partial ES6, optimization level 9, stack depth 65535); on a stack overflow or an unknown exception it retries in interpreted mode within the same 20 s limit.</li>
+<li><strong>No prime builtins.</strong> Primality and factorization builtins are withdrawn in C++, Ruby, Raku and Racket, so prime-flavored problems stay non-trivial. Modular exponentiation, gcd/lcm, factorials and the rest of the standard libraries remain available.</li>
+<li><strong>C++ quirk.</strong> Clang 3.5 accepted the C++1z range-for shorthand <code>for(x:a)</code> (a proposal later dropped from the standard). The original site rejected it with <code>-Werror=c++1z-extensions</code>, and so does this replica; <code>for(auto x:a)</code> still works.
+An AI model found a way to switch that error off from inside <a href="#problems/16/scoreboard/gpt-5.6-sol-max-cc">its own solution</a> and use the shorthand anyway. No Googler ever did.</li>
+<li><strong>Isolation.</strong> Every execution starts fresh processes in an isolated container with no network access, and everything it started is cleaned up afterwards.</li>
+</ul>
+<h2 id="about-why-no-anthropic-models"><a href="#about/why-no-anthropic-models">Why no Anthropic models?</a></h2>
+<p>With a 30-minute limit and no way for the model to see the clock, a session can end before the model expects it to.
+Only accepted submissions are saved. It makes sense to submit something that works early, then submit each improvement
+rather than save it for later. GPT models submit at least 10 times per cell, sometimes 30.</p>
+<p>I tried Claude Opus 5 and 5.5, Claude Fable 5.1, GLM 5.3 and 5.3 Flash, and DeepSeek V4.1 Flash, all at their maximum
+thinking effort. I kept running into the same problem: they spent most of the session thinking, then submitted once or
+not at all. I tried changing the prompts to get them to submit early and often, without much success.</p>
+<p>I don't know how much of this comes from the way maximum thinking effort is tuned, and how much is simply that golfing
+takes them that long. I considered two ways around it:</p>
+<ul>
+<li><strong>Lower the thinking effort.</strong> Opus 5 at medium effort still submitted only a few times. On the small number of
+problems I tried, it couldn't match GPT-5.6 Luna. I don't think a leaderboard entry from that run would be a fair
+picture of what it can do.</li>
+<li><strong>Remove the time limit.</strong> That would be unfair to the models already tested under the 30-minute rule, and would
+need a much larger budget.</li>
+</ul>
+<p>Cost is another problem. Anthropic's terms don't allow a Claude subscription to be used in a third-party harness, so
+these runs would have to use the API. I estimate $200 to $500 for all 256 cells, depending on the model.
+It could cost more without the time limit. That's not a small amount.</p>
+<p>For now, I'm leaving these models off the leaderboard. I'll try again if the situation changes.</p>
+<h2 id="about-why-i-built-this"><a href="#about/why-i-built-this">Why I built this</a></h2>
+<p>I started this after OpenAI introduced GPT-6 Astra as <a href="https://openai.com/index/gpt-6-astra/">&quot;a new generation of
+intelligence&quot;</a>, and its president Greg Brockman ended the launch briefing with
+<a href="https://www.axios.com/2026/09/03/openai-astra-gpt-6-agi-brockman">&quot;Welcome to the AGI era.&quot;</a> It made me wonder: <em>how
+would we judge whether frontier models have reached the limits of human intelligence?</em></p>
+<p>My first thought was mathematics. Some of the sharpest human minds have worked on it for centuries, and Astra had
+already helped <a href="https://openai.com/index/ten-advances-in-mathematics/">solve long-standing open problems</a>. Then I
+thought of code golf. A golf score can't answer that question about intelligence, but it gives me a comparison I
+understand: models trying to beat people at something those people cared about and worked hard at.</p>
+<p>I spent about three years in middle and high school training for math olympiads, and golfing often gives me the same
+feeling as working on a math problem. You can be stuck for ages until you find a different way to look at it. Then you
+still have to make the idea work. And as you get further, the next step tends to get harder, whether you're finishing
+a proof or trying to lose one more byte.</p>
+<p>That was a big part of the appeal of go/codegolf. I'd guess 30 to 50 of us played the weekly problem. We'd spend lunch
+breaks trying to save a single byte. Sometimes an idea would come to you and you couldn't wait to try it; sometimes
+you'd go days without an improvement, while the scoreboard kept telling you a shorter solution existed. When the
+challenge phase opened and we could finally read each other's code, some of the shortest solutions were astonishing.
+I once tried to work out how many engineer hours we were all &quot;wasting&quot; on it, multiplied that by the average Googler's
+salary, and estimated its weekly &quot;negative impact&quot; on Google.</p>
+<p>Thanks to <a href="https://github.com/zmxv">@wangz</a> for creating go/codegolf. Without it, neither that contest nor this benchmark
+would exist. And thanks to everyone who wrote a problem or competed: your records are representing the humans here,
+and you've made them hard to beat.</p>
+<p>I'm impressed by how far language models have come, especially when I look at some of Astra's solutions. There's
+still plenty of room to improve. The best known size isn't a fixed answer key: each shorter solution changes the
+target for everyone. I'm looking forward to seeing what the next models find.</p>
+
+</section>
+<section id="page-why" class="page prose" hidden>
+<h1>Why Code Golf</h1>
+<blockquote>
+<p><strong>TL;DR:</strong> Every model with a complete run can solve these problems. They differ a lot in how short they can make
+their solutions, even with the same tools and time limit. That's what I want to measure: can a model keep finding
+better ideas after it has code that already works?</p>
+</blockquote>
+<nav class="page-toc" aria-label="Contents"><p class="toc-title">Contents</p><ol><li><a href="#why/previously-unpublished-problems">Previously unpublished problems</a></li><li><a href="#why/getting-a-working-solution">Getting a working solution</a></li><li><a href="#why/scoring-by-byte-count">Scoring by byte count</a></li><li><a href="#why/less-boilerplate-to-golf">Less boilerplate to golf</a></li><li><a href="#why/knowing-the-language-and-the-runtime">Knowing the language and the runtime</a></li><li><a href="#why/trying-things-out">Trying things out</a></li><li><a href="#why/finding-a-different-approach">Finding a different approach</a></li><li><a href="#why/why-one-byte-can-be-hard-to-remove">Why one byte can be hard to remove</a></li><li><a href="#why/knowing-when-to-keep-trying">Knowing when to keep trying</a></li><li><a href="#why/eight-different-languages">Eight different languages</a></li><li><a href="#why/human-records-to-compare-against">Human records to compare against</a></li><li><a href="#why/what-the-results-show-so-far">What the results show so far</a></li></ol></nav><h2 id="why-previously-unpublished-problems"><a href="#why/previously-unpublished-problems">Previously unpublished problems</a></h2>
+<p>These problems were written by Googlers for an internal site. Until this site, neither the statements nor the test
+cases had been published. The human solutions are still private. There was no public set of answers for a model to
+memorize; it has to work out a solution for itself.</p>
+<h2 id="why-getting-a-working-solution"><a href="#why/getting-a-working-solution">Getting a working solution</a></h2>
+<p>Frontier models don't have much trouble getting these problems right. Every model with a complete run has an accepted
+solution in <strong>all 256 cells</strong>. If I only counted passing solutions, they would all have the same result.</p>
+<p>But their scores range from <strong>56.646%</strong> to <strong>85.764%</strong> in the original languages,
+and from <strong>48.547%</strong> to <strong>90.401%</strong> in the added ones. Once a solution works,
+there's still the question of how much shorter it could be. That's where the models start to differ.</p>
+<h2 id="why-scoring-by-byte-count"><a href="#why/scoring-by-byte-count">Scoring by byte count</a></h2>
+<ul>
+<li><strong>Exact.</strong> Either the program passes or it doesn't. If it passes, we count its bytes. There's no human rater or LLM
+judge deciding whether it's good code, and no points for style.</li>
+<li><strong>Fine-grained.</strong> Saving one byte always helps. The squared score makes the difference between a close solution and
+an even closer one matter.</li>
+<li><strong>Open-ended.</strong> We don't know the shortest possible answers. &quot;Best known&quot; just means nobody has found anything shorter
+yet. Models have already beaten the 2015 human record in <strong>42</strong> cells. Getting every problem
+right doesn't end the competition, and a new record gives everyone else something to aim for.</li>
+</ul>
+<h2 id="why-less-boilerplate-to-golf"><a href="#why/less-boilerplate-to-golf">Less boilerplate to golf</a></h2>
+<p>In some contests, you spend part of your byte count on getting the input in and the output out. I like go/codegolf's
+format because it leaves very little of that overhead. I kept the same format for the four added languages:</p>
+<ul>
+<li><strong>A function, not a program.</strong> You define a function; the wrapper handles input and output. Top-level code still
+runs, so you can use global variables and precomputed tables, or write a recursive solution.</li>
+<li><strong>A fixed name: <code>g</code>.</strong> The name costs one byte, and a recursive call is just <code>g(…)</code>. Recursion is often the shortest
+approach, though getting a very short recursive function right can be difficult.</li>
+<li><strong>Libraries already imported.</strong> The C++, Haskell, Racket and Ruby templates import most of the useful standard
+libraries. The Python template imports nothing, so using even <code>re</code> costs <code>import re</code>. Sometimes it's still worth it.</li>
+<li><strong>Nearly every byte is part of the solution.</strong> With I/O, naming and most imports taken care of, you're mostly golfing
+the code that solves the problem, rather than the code needed to run it.</li>
+</ul>
+<h2 id="why-knowing-the-language-and-the-runtime"><a href="#why/knowing-the-language-and-the-runtime">Knowing the language and the runtime</a></h2>
+<p>When you're trying to save a byte, details that rarely matter in ordinary code can become useful: operator precedence,
+implicit conversions, an obscure builtin, a non-standard extension, or what a particular compiler does with undefined
+behavior. The original languages use old runtimes, including a 2015 C++ toolchain, Python 2.7 and GHC 7.8. Knowing how a
+modern version behaves isn't enough. The model has to know, or try out, what works in the version it's actually using.</p>
+<h2 id="why-trying-things-out"><a href="#why/trying-things-out">Trying things out</a></h2>
+<p>A lot of golfing involves questions you can answer by running a few lines of code:</p>
+<ol>
+<li>Will this interpreter accept this syntax? Will the compiler let me leave that out?</li>
+<li>Try it in the playground or make a submission.</li>
+<li>If it works, see where else you can use it.</li>
+</ol>
+<p>Sometimes the experiment needs a program of its own. Golfers write searches for a <strong>magic number</strong> or <strong>magic string</strong>
+that encodes a lookup table, or for the <strong>shortest expression</strong> that gives the right result using a few operators.
+A model that never runs these experiments will miss some of the same savings.</p>
+<h2 id="why-finding-a-different-approach"><a href="#why/finding-a-different-approach">Finding a different approach</a></h2>
+<p>Often you can't get to the shortest solution by trimming the obvious one. You need a different algorithm, or a
+different way to represent the data. These are some examples I like from the models' solutions:</p>
+<ul>
+<li>
+<p><strong>Carries without carrying.</strong> <a href="#problems/02/scoreboard">Addition by hand</a> asks how many carries occur when you add two
+numbers column by column. Each carry turns ten in one column into one in the next, reducing the digit sum by 9. So
+the answer is (digit sum of a + digit sum of b − digit sum of a+b) ÷ 9. Every GPT model uses this in Python and Haskell.</p>
+<p><a href="#problems/02/scoreboard/gpt-6-astra-max-py">The shortest Python solution</a> avoids even the subtraction between digit
+sums. Instead of subtracting the digits of a+b, it adds the digits of 10⁵¹−1−(a+b). That's 51 nines minus a+b, so each
+digit is 9 minus the corresponding digit of a+b. Add up the digits in one string, divide by 9 and subtract 51.
+JavaScript and C++ don't have integers wide enough to add two 50-digit numbers here, so every GPT model still does
+the addition column by column in those languages.</p>
+</li>
+<li>
+<p><strong>Letting the kingdoms fight.</strong> <a href="#problems/12/scoreboard">Bit Kingdoms</a> asks which byte of a 32-bit integer has the most
+set bits, with ties going to the lowest byte. <a href="#problems/12/scoreboard/gpt-6-astra-max-js">GPT-6 Astra's JavaScript</a>
+doesn't count the bits in each byte. It removes one set bit from each byte in turn, starting at the top, until none
+are left. The byte that runs out last wins. Since each round goes from the top byte down, a lower byte outlasts a
+higher one in a tie.</p>
+<p>This fits neatly into a few bit operations: rotate by 8 bits to bring the next byte to the top, clear its lowest set
+bit with x &amp; (x−1), and use the number of turns modulo 4 to identify the winner. The result is 50 bytes. The five GPT
+JavaScript solutions that count bits take 77 to 89. <a href="#problems/12/scoreboard/gpt-6-astra-max-cc">Astra's C++</a> does the
+reverse: each byte gains a bit in turn, and the first to fill up wins.</p>
+</li>
+<li>
+<p><strong>Counting walls instead of paths.</strong> <a href="#problems/05/scoreboard">2×n matrix</a> asks how many blocked cells you have to clear
+to walk from the top-left to the bottom-right of a two-row grid. It looks like a shortest-path problem, but
+<a href="#problems/05/scoreboard/gpt-6-astra-max-hs">GPT-6 Astra's Haskell</a> counts walls. A blocked cell in each row forms a wall
+if the two cells are at most one column apart. You have to clear at least one cell from every wall, and walls that
+don't share a cell need separate clearances.</p>
+<p>The answer is the largest number of walls that share no cell. A greedy left-to-right pairing finds it. Haskell's
+<code>deleteFirstsBy</code> does exactly that pairing if you define equality as &quot;at most one column apart&quot;. It takes 71 bytes;
+the other GPT Haskell solutions work out the cheapest path column by column and take 80 or more.</p>
+</li>
+<li>
+<p><strong>Queens in the complex plane.</strong> In <a href="#problems/03/scoreboard">Surviving queens</a>, a queen survives if no other queen
+shares its row, column or diagonal. Three GPT models place the queen in row r and column c at the complex number
+r + ci. Then two queens attack each other exactly when the fourth power of their difference is real.</p>
+<p>The directions a queen can move are the eight multiples of 45°. Taking the fourth power multiplies angles by four,
+putting exactly those directions on the real axis, at 0° or 180°. <a href="#problems/03/scoreboard/gpt-5.5-xhigh-py">GPT-5.5's version</a>
+is the shortest Python solution, at 110 bytes.</p>
+</li>
+<li>
+<p><strong>A table in one number.</strong> <a href="#problems/32/scoreboard">Parenthesis sequence (hard)</a> counts the balanced subsequences in a
+string of parentheses. The usual approach keeps a table: for each depth, how many subsequences have we found so far
+that end there? Every GPT model's Python packs that table into one big integer, with one digit per depth.</p>
+<p>In base 9⁹, multiplying by 9⁹+1 keeps each count at its current depth and also copies it one level deeper. That's the
+whole update for <code>(</code>. For <code>)</code>, do the same multiplication and then divide by 9⁹, copying the counts one level up
+instead. Rounding down discards exactly the subsequences that would close more parentheses than they opened.
+The lowest digit holds the answer, apart from the empty subsequence, which we subtract:
+<a href="#problems/32/scoreboard/gpt-6-astra-max-py">61 bytes</a>.</p>
+</li>
+<li>
+<p><strong>One point instead of six faces.</strong> <a href="#problems/31/scoreboard">The Rolling Dice</a> asks whether a die is back in its
+starting orientation after each roll. Most solutions keep track of the faces. GPT-6 Astra's
+<a href="#problems/31/scoreboard/gpt-6-astra-max-py">Python</a> and <a href="#problems/31/scoreboard/gpt-6-astra-max-hs">Haskell</a>, the shortest
+in both languages, follow one point on a sphere around the die instead. Choose a point that no nontrivial rotation
+of the die leaves in place, and it returns to its starting position exactly when the die does.</p>
+<p><a href="https://en.wikipedia.org/wiki/Stereographic_projection">Stereographic projection</a> maps the sphere to the complex
+plane. A roll in direction k, where k is one of 1, i, −1 or −i, becomes z → (z+k)/(1−z/k). Python can do this with
+ordinary complex arithmetic. The Haskell solution works modulo 37, using 6 for i because 6² = 36 ≡ −1, and multiplying
+by y³⁵ to divide by y. Every step is exact. Starting at 4, the point never visits a number below 4, so 4 ÷ z rounded
+down gives 1 when it returns to 4 and 0 otherwise. This takes 82 bytes; the other GPT Haskell solutions take 102 or
+more.</p>
+</li>
+</ul>
+<p>These solutions depend on finding and trying different ideas, then choosing the one that uses the fewest bytes.
+The fastest or most elegant algorithm isn't necessarily the one you want. Ordinary coding benchmarks rarely give a
+model a reason to look for this sort of solution.</p>
+<h2 id="why-why-one-byte-can-be-hard-to-remove"><a href="#why/why-one-byte-can-be-hard-to-remove">Why one byte can be hard to remove</a></h2>
+<p>In a well-golfed program, the same piece of code often does several jobs. That's how it got so short. It's also why an
+apparently simple change can break something elsewhere.</p>
+<p>Here is <a href="#problems/16/scoreboard/gpt-6-astra-max-js">GPT-6 Astra's 81-byte JavaScript</a> for <a href="#problems/16/scoreboard">Nim</a>:</p>
+<pre><code class="language-js">function g(a){for(i=d=-1,x=eval(a.join('^'));x*d&lt;0;)d=2*(a[++i]&amp;x)-x;return[i,d]}
+</code></pre>
+<p>The algorithm is the usual one. Let x be the XOR of all the heap sizes. If x is 0, there's no winning move. Otherwise,
+find the first heap a for which a − (a XOR x) is positive, and take that many stones. But fitting it into this code
+requires a few tricks:</p>
+<ul>
+<li><code>eval(a.join('^'))</code> builds an expression such as <code>3^5^6</code> and evaluates it to get x.</li>
+<li><code>2*(a[++i]&amp;x)-x</code> is equal to a − (a XOR x), but only needs to refer to the heap once. That saves a temporary variable.
+Unless x is 0, the expression is never 0, and it's negative exactly when we're looking at the wrong heap.</li>
+<li><code>x*d&lt;0</code> keeps the loop running while d is negative. If x is 0, the product is 0 and we skip the loop entirely.</li>
+<li><code>i=d=-1</code> sets up three things at once: <code>++i</code> will start at heap 0, the first loop test will pass whenever x isn't 0,
+and if the loop never runs, <code>[i,d]</code> already contains the required answer, <code>[-1,-1]</code>.</li>
+</ul>
+<p><a href="#problems/16/scoreboard/gpt-5.5-xhigh-js">GPT-5.5's JavaScript</a> takes one more byte. It uses the same algorithm, <code>eval</code> and algebraic identity:</p>
+<pre><code class="language-js">function g(a){x=eval(a.join('^'));for(i=~!x;(y=(a[++i]&amp;x)*2-x)&lt;0;);return[i,y-!y]}
+</code></pre>
+<p>The difference is where it handles the losing position. The search starts at <code>~!x</code>, which is −2 when x is 0.
+The first heap it reads is then <code>a[-1]</code>. There is no such heap, so <code>y</code> comes out as 0 and the search stops.
+Finally, <code>y-!y</code> changes that 0 to −1, leaving any other value alone.</p>
+<p>You can't turn one version into the other with a small local edit. The special case is handled in different places,
+and the surrounding code relies on those choices. That's common in golfed code: a variable has two meanings, or an
+expression both updates the state and checks whether we're done. Remove a byte in one place and you may break an
+assumption somewhere else.</p>
+<p>The same thing happens in just 47 bytes of Python. <a href="#problems/11/scoreboard/gpt-5.5-xhigh-py">GPT-5.5's solution</a> for
+<a href="#problems/11/scoreboard">Drink Orders</a> computes the binomial coefficient C(D+P−1, P) modulo 2³¹−1:</p>
+<pre><code class="language-python">g=lambda a,b,c=2:b&lt;1or a*g(a+1,b-1,9)/b%~-c**31
+</code></pre>
+<p>Each call multiplies by a and divides by b. To keep that division exact, we mustn't reduce modulo 2³¹−1 until the
+outermost call. The third parameter lets the code treat that call differently. <code>~-c**31</code> means c³¹−1: in the outermost
+call, c has its default value of 2, giving the required modulus. Recursive calls use c = 9, so their modulus is 9³¹−1,
+larger than anything they return. Taking the remainder there changes nothing. The base case, <code>b&lt;1or</code>, returns True,
+which acts as 1 in the multiplication.</p>
+<p>To make code like this shorter, the model has to understand why all the pieces work together. A change still has to
+leave the whole program correct.</p>
+<h2 id="why-knowing-when-to-keep-trying"><a href="#why/knowing-when-to-keep-trying">Knowing when to keep trying</a></h2>
+<p>The first few cuts are usually easy. After that, you can spend a long time trying things without saving a byte.
+It's tempting to stop there, even when the scoreboard says a shorter solution exists.</p>
+<p>Models get 30 minutes per cell and are always shown the best known size. They don't have to use the whole session:
+the instructions say to keep submitting while they have ideas for improvements, and to stop when they run out.
+Continuing to come up with things to try matters here.</p>
+<p>GPT-6 Sol usually stops after 5 to 10 minutes, even at its highest reasoning effort. With exactly the same prompts,
+every GPT-5 model, including GPT-5.6 Luna, is still working at the 30-minute limit on most cells. I suspect this explains
+much of GPT-6 Sol's ranking.</p>
+<h2 id="why-eight-different-languages"><a href="#why/eight-different-languages">Eight different languages</a></h2>
+<p>The language set includes imperative languages, Haskell's functional style, Racket's Lisp prefix notation and the
+stack-based esoteric language GolfScript, for which there's little training data. Golfing well across all of them
+takes more than repeating familiar patterns; a model has to apply what it knows in quite different settings.</p>
+<h2 id="why-human-records-to-compare-against"><a href="#why/human-records-to-compare-against">Human records to compare against</a></h2>
+<p>These records came from Googlers who enjoyed code golf and spent a week competing on each problem, with the option
+to keep challenging afterwards. They put real time into finding shorter solutions. Beating those records means more
+to me than beating a reference answer nobody tried very hard to golf.</p>
+<h2 id="why-what-the-results-show-so-far"><a href="#why/what-the-results-show-so-far">What the results show so far</a></h2>
+<ul>
+<li>Humans still lead overall in the 2015 languages: <strong>90.532%</strong>, compared with <strong>85.764%</strong>
+for GPT-6 Astra.</li>
+<li>GPT-6 Astra has passed the humans in <strong>Haskell</strong> (88.861% vs 80.330%), but not in JavaScript, Python or C++.</li>
+<li>Models have beaten the 2015 records in <strong>42</strong> cells, including 22 in Haskell.
+That doesn't count the unranked oracle.</li>
+</ul>
+
+</section>
+</main>
+<script src="app.js?v=94d59e0bb5ea" defer></script>
+</body>
+</html>

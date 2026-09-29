@@ -1,0 +1,17 @@
+{"input":[""],"output":""}
+{"input":["abcdefg"],"output":"abcdefg"}
+{"input":["gfedcba"],"output":"abcdefg"}
+{"input":["alphabet"],"output":"aabehlpt"}
+{"input":["code search"],"output":"accd eehors"}
+{"input":["hello, world!"],"output":"dehll, loorw!"}
+{"input":["a b c d e f g"],"output":"a b c d e f g"}
+{"input":["g f e d c b a"],"output":"a b c d e f g"}
+{"input":["UPPERCASE lowercase"],"output":"UPPERCASE aceelorsw"}
+{"input":["THERE ARE NO LOWERCASE LETTERS HERE!"],"output":"THERE ARE NO LOWERCASE LETTERS HERE!"}
+{"input":["no matter where you go, there you are."],"output":"aa eeeeee ghhmn ooo or, rrrtt tuu wyy."}
+{"input":["the quick brown fox jumps over the lazy dog"],"output":"abc deeef ghhij klm noooo pqrr stt uuvw xyz"}
+{"input":["~i$;YE(QG|QCCNK?dm3ObI{Bv1VV$$GYUt.xfuoTf$h-bkVY<g"],"output":"~b$;YE(QG|QCCNK?bd3OfI{Bf1VV$$GYUg.hikmTo$t-uvVY<x"}
+{"input":["HLqIX_(Qj8,3W7l9-fRZk6Cw,60Dn<`x,9]O%sju_L2vi_K~1JHmLg3*Q`f2CT%hqBsgbUB9>BAXP:2:PIrjQyc,*=cL{*RP/yQ*"],"output":"HLbIX_(Qc8,3W7c9-fRZf6Cg,60Dg<`h,9]O%ijj_L2jk_K~1JHlLm3*Q`n2CT%qqBrssUB9>BAXP:2:PIuvQwx,*=yL{*RP/yQ*"}
+{"input":["t?iJ#PS4NR8t ZS1&GUO&}&;PEpZ)=}r^r@AH&}qxpJjF(12YpRFFML$Pf>zi6dX(TdAapdN~Oyi@p,k@F~AO;qo*]9`>rp(N[6%3$5vFG=*2}#|z|vk2T]5],5*(Vu*RM|:P]Lo%RGY/zA;Q!1OFT"],"output":"a?dJ#PS4NR8d ZS1&GUO&}&;PEdZ)=}f^i@AH&}iijJkF(12YkRFFML$Po>op6pX(TpApppN~Oqq@r,r@F~AO;rt*]9`>tu(N[6%3$5vFG=*2}#|v|xy2T]5],5*(Vz*RM|:P]Lz%RGY/zA;Q!1OFT"}
+{"input":["F,Y^rV!-~!LJk2zzfXLPv4a!2!4RD)s+u|Dy#X|V}`3#;}4][G[4VokS=ICL?`dnd%<aC{Tcd/tE2dzCk3_2oDSXhhLaHi3M?#/fuI=Y;Ht]LJ:9[IyFljE}#6TdoKX8~na=lkZE@=.HTeMVthvr+5;B}aDpSD);5Yw>8ZCwgfp-:$P!o[}?w!z[3`[{H?So)y>!Vd^,"],"output":"F,Y^aV!-~!LJa2aaaXLPc4d!2!4RD)d+d|Dd#X|V}`3#;}4][G[4VddS=ICL?`eff%<fC{Tgh/hE2hiCj3_2kDSXkkLkHl3M?#/lnI=Y;Hn]LJ:9[IoFooE}#6TooKX8~pp=rrZE@=.HTsMVtttu+5;B}uDvSD);5Yv>8ZCwwwy-:$P!y[}?y!z[3`[{H?Sz)z>!Vz^,"}
+{"input":["t|vrZ-T+4~LcFgloPS9kU|?.0J9 W*.@W{{%R`.=HoZxmE1ijcT3oF!PODX@5&m RSQQ]r*=gCeqy|Sx-={p9(p8&e0{NSz({OwP((K6<Uj-2+b&aVi4yBSZx{^w4!qMeHapbvRP+4Oh;=!ktY]=LItSFiU2NvsNtx=G{sN{Sr. mZRB#HM %k3_v[hb$O``C[f_*k.>3a(r9*~?YuyQ_iNtr8yK7mgJ:OJ`.Eh[18gRgic.m^)xG]zENC"],"output":"a|aaZ-T+4~LbFbbcPS9cU|?.0J9 W*.@W{{%R`.=HcZeeE1efgT3gF!PODX@5&g RSQQ]g*=gChhh|Si-={i9(i8&i0{NSi({OjP((K6<Uj-2+k&kVk4kBSZl{^m4!mMmHmmooRP+4Oo;=!ppY]=LIpSFqU2NqrNrr=G{rN{Sr. sZRB#HM %s3_t[tt$O``C[t_*t.>3u(v9*~?YvvQ_vNww8xK7xxJ:OJ`.Ex[18xRyyy.y^)zG]zENC"}
