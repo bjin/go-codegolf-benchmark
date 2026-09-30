@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>go/codegolf benchmark</title>
 <meta name="description" content="go/codegolf benchmark: frontier models vs. Google's 2015 code golfers.">
-<meta name="data-url" content="data.json?v=b3cc353f0000">
+<meta name="data-url" content="data.json?v=bb9055c70fb8">
 <link rel="stylesheet" href="style.css?v=d1d5a523ebc9">
 <noscript><style>.loading{display:none}</style></noscript>
 <script>(function(){var t=null;try{t=localStorage.getItem("theme")}catch(e){}if(t!=="light"&&t!=="dark"){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.setAttribute("data-theme",t)})();</script>
@@ -317,8 +317,8 @@ memorize; it has to work out a solution for itself.</p>
 <h2 id="why-getting-a-working-solution"><a href="#why/getting-a-working-solution">Getting a working solution</a></h2>
 <p>Frontier models don't have much trouble getting these problems right. Every model with a complete run has an accepted
 solution in <strong>all 256 cells</strong>. If I only counted passing solutions, they would all have the same result.</p>
-<p>But their scores range from <strong>56.646%</strong> to <strong>85.764%</strong> in the original languages,
-and from <strong>48.547%</strong> to <strong>90.401%</strong> in the added ones. Once a solution works,
+<p>But their scores range from <strong>56.555%</strong> to <strong>85.602%</strong> in the original languages,
+and from <strong>48.498%</strong> to <strong>90.272%</strong> in the added ones. Once a solution works,
 there's still the question of how much shorter it could be. That's where the models start to differ.</p>
 <h2 id="why-scoring-by-byte-count"><a href="#why/scoring-by-byte-count">Scoring by byte count</a></h2>
 <ul>
@@ -327,7 +327,7 @@ judge deciding whether it's good code, and no points for style.</li>
 <li><strong>Fine-grained.</strong> Saving one byte always helps. The squared score makes the difference between a close solution and
 an even closer one matter.</li>
 <li><strong>Open-ended.</strong> We don't know the shortest possible answers. &quot;Best known&quot; just means nobody has found anything shorter
-yet. Models have already beaten the 2015 human record in <strong>42</strong> cells. Getting every problem
+yet. Models have already beaten the 2015 human record in <strong>45</strong> cells. Getting every problem
 right doesn't end the competition, and a new record gives everyone else something to aim for.</li>
 </ul>
 <h2 id="why-less-boilerplate-to-golf"><a href="#why/less-boilerplate-to-golf">Less boilerplate to golf</a></h2>
@@ -485,10 +485,10 @@ to keep challenging afterwards. They put real time into finding shorter solution
 to me than beating a reference answer nobody tried very hard to golf.</p>
 <h2 id="why-what-the-results-show-so-far"><a href="#why/what-the-results-show-so-far">What the results show so far</a></h2>
 <ul>
-<li>Humans still lead overall in the 2015 languages: <strong>90.532%</strong>, compared with <strong>85.764%</strong>
+<li>Humans still lead overall in the 2015 languages: <strong>90.396%</strong>, compared with <strong>85.602%</strong>
 for GPT-6 Astra.</li>
-<li>GPT-6 Astra has passed the humans in <strong>Haskell</strong> (88.861% vs 80.330%), but not in JavaScript, Python or C++.</li>
-<li>Models have beaten the 2015 records in <strong>42</strong> cells, including 22 in Haskell.
+<li>GPT-6 Astra has passed the humans in <strong>Haskell</strong> (88.320% vs 79.899%), but not in JavaScript, Python or C++.</li>
+<li>Models have beaten the 2015 records in <strong>45</strong> cells, including 23 in Haskell.
 That doesn't count the unranked oracle.</li>
 </ul>
 
