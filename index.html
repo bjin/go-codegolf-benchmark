@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>go/codegolf benchmark</title>
 <meta name="description" content="go/codegolf benchmark: frontier models vs. Google's 2015 code golfers.">
-<meta name="data-url" content="data.json?v=bb9055c70fb8">
+<meta name="data-url" content="data.json?v=8d3cb6a403e1">
 <link rel="stylesheet" href="style.css?v=d1d5a523ebc9">
 <noscript><style>.loading{display:none}</style></noscript>
 <script>(function(){var t=null;try{t=localStorage.getItem("theme")}catch(e){}if(t!=="light"&&t!=="dark"){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.setAttribute("data-theme",t)})();</script>
@@ -170,7 +170,7 @@ where it could work directly from the human records and try to improve them.</p>
 <ul>
 <li>The oracle is <strong>unranked</strong>; it only supplies best-known sizes.</li>
 <li>When it beats every competitor in a cell, the Problems page shows its byte count as <strong>Known Best</strong>, but never its code.</li>
-<li>Even the leading model scores below 93% in every language. The oracle had much more time and
+<li>Even the leading model scores below 92% in every language. The oracle had much more time and
 information to work with.</li>
 </ul>
 <h2 id="about-scoring"><a href="#about/scoring">Scoring</a></h2>
@@ -317,8 +317,8 @@ memorize; it has to work out a solution for itself.</p>
 <h2 id="why-getting-a-working-solution"><a href="#why/getting-a-working-solution">Getting a working solution</a></h2>
 <p>Frontier models don't have much trouble getting these problems right. Every model with a complete run has an accepted
 solution in <strong>all 256 cells</strong>. If I only counted passing solutions, they would all have the same result.</p>
-<p>But their scores range from <strong>56.555%</strong> to <strong>85.602%</strong> in the original languages,
-and from <strong>48.498%</strong> to <strong>90.272%</strong> in the added ones. Once a solution works,
+<p>But their scores range from <strong>55.901%</strong> to <strong>84.630%</strong> in the original languages,
+and from <strong>48.023%</strong> to <strong>89.328%</strong> in the added ones. Once a solution works,
 there's still the question of how much shorter it could be. That's where the models start to differ.</p>
 <h2 id="why-scoring-by-byte-count"><a href="#why/scoring-by-byte-count">Scoring by byte count</a></h2>
 <ul>
@@ -485,9 +485,9 @@ to keep challenging afterwards. They put real time into finding shorter solution
 to me than beating a reference answer nobody tried very hard to golf.</p>
 <h2 id="why-what-the-results-show-so-far"><a href="#why/what-the-results-show-so-far">What the results show so far</a></h2>
 <ul>
-<li>Humans still lead overall in the 2015 languages: <strong>90.396%</strong>, compared with <strong>85.602%</strong>
+<li>Humans still lead overall in the 2015 languages: <strong>89.383%</strong>, compared with <strong>84.630%</strong>
 for GPT-6 Astra.</li>
-<li>GPT-6 Astra has passed the humans in <strong>Haskell</strong> (88.320% vs 79.899%), but not in JavaScript, Python or C++.</li>
+<li>GPT-6 Astra has passed the humans in <strong>Haskell</strong> (87.123% vs 78.843%), but not in JavaScript, Python or C++.</li>
 <li>Models have beaten the 2015 records in <strong>45</strong> cells, including 23 in Haskell.
 That doesn't count the unranked oracle.</li>
 </ul>
