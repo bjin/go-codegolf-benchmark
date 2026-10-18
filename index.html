@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>go/codegolf benchmark</title>
 <meta name="description" content="go/codegolf benchmark: frontier models vs. Google's 2015 code golfers.">
-<meta name="data-url" content="data.json?v=38df41863ed4">
-<link rel="stylesheet" href="style.css?v=d1d5a523ebc9">
+<meta name="data-url" content="data.json?v=9b95bfddbf89">
+<link rel="stylesheet" href="style.css?v=6027383c2807">
 <noscript><style>.loading{display:none}</style></noscript>
 <script>(function(){var t=null;try{t=localStorage.getItem("theme")}catch(e){}if(t!=="light"&&t!=="dark"){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.setAttribute("data-theme",t)})();</script>
 </head>
@@ -40,7 +40,7 @@
 compare with our old records. Each model gets 30 minutes per problem in each of eight languages to make its solution
 as short as it can. The leaderboard scores the byte counts, not just whether the code works.</p>
 </blockquote>
-<nav class="page-toc" aria-label="Contents"><p class="toc-title">Contents</p><ol><li><a href="#about/where-the-problems-come-from-go-codegolf">Where the problems come from: go/codegolf</a></li><li><a href="#about/from-a-weekly-contest-to-a-benchmark">From a weekly contest to a benchmark</a></li><li><a href="#about/the-eight-languages">The eight languages</a></li><li><a href="#about/how-models-play">How models play</a></li><li><a href="#about/known-best-and-the-oracle">Known Best and the oracle</a></li><li><a href="#about/scoring">Scoring</a></li><li><a href="#about/technical-details">Technical details</a></li><li><a href="#about/why-no-anthropic-models">Why no Anthropic models?</a></li><li><a href="#about/why-i-built-this">Why I built this</a></li></ol></nav><h2 id="about-where-the-problems-come-from-go-codegolf"><a href="#about/where-the-problems-come-from-go-codegolf">Where the problems come from: go/codegolf</a></h2>
+<nav class="page-toc" aria-label="Contents"><p class="toc-title">Contents</p><ol><li><a href="#about/where-the-problems-come-from-go-codegolf">Where the problems come from: go/codegolf</a></li><li><a href="#about/from-a-weekly-contest-to-a-benchmark">From a weekly contest to a benchmark</a></li><li><a href="#about/the-eight-languages">The eight languages</a></li><li><a href="#about/how-models-play">How models play</a></li><li><a href="#about/known-best-and-the-oracle">Known Best and the oracle</a></li><li><a href="#about/scoring">Scoring</a></li><li><a href="#about/technical-details">Technical details</a></li><li><a href="#about/thinking-effort-and-the-30-minute-limit">Thinking effort and the 30-minute limit</a></li><li><a href="#about/why-i-built-this">Why I built this</a></li></ol></nav><h2 id="about-where-the-problems-come-from-go-codegolf"><a href="#about/where-the-problems-come-from-go-codegolf">Where the problems come from: go/codegolf</a></h2>
 <p>In 2015, when I was at Google, I spent a lot of time on an internal site called <strong>go/codegolf</strong>. There was one problem
 a week, and we competed to write the shortest program that solved it. Most of the regulars were code-golf enthusiasts.</p>
 <p>Each problem went through three phases:</p>
@@ -170,7 +170,7 @@ where it could work directly from the human records and try to improve them.</p>
 <ul>
 <li>The oracle is <strong>unranked</strong>; it only supplies best-known sizes.</li>
 <li>When it beats every competitor in a cell, the Problems page shows its byte count as <strong>Known Best</strong>, but never its code.</li>
-<li>Even the leading model scores below 92% in every language. The oracle had much more time and
+<li>Even the leading model scores below 95% in every language. The oracle had much more time and
 information to work with.</li>
 </ul>
 <h2 id="about-scoring"><a href="#about/scoring">Scoring</a></h2>
@@ -256,26 +256,23 @@ body of a <code>let</code> binding, and mueval evaluates the whole thing as one 
 An AI model found a way to switch that error off from inside <a href="#problems/16/scoreboard/gpt-5.6-sol-max-cc">its own solution</a> and use the shorthand anyway. No Googler ever did.</li>
 <li><strong>Isolation.</strong> Every execution starts fresh processes in an isolated container with no network access, and everything it started is cleaned up afterwards.</li>
 </ul>
-<h2 id="about-why-no-anthropic-models"><a href="#about/why-no-anthropic-models">Why no Anthropic models?</a></h2>
-<p>With a 30-minute limit and no way for the model to see the clock, a session can end before the model expects it to.
-Only accepted submissions are saved. It makes sense to submit something that works early, then submit each improvement
-rather than save it for later. GPT models submit at least 10 times per cell, sometimes 30.</p>
-<p>I tried Claude Opus 5 and 5.5, Claude Fable 5.1, GLM 5.3 and 5.3 Flash, and DeepSeek V4.1 Flash, all at their maximum
-thinking effort. I kept running into the same problem: they spent most of the session thinking, then submitted once or
-not at all. I tried changing the prompts to get them to submit early and often, without much success.</p>
-<p>I don't know how much of this comes from the way maximum thinking effort is tuned, and how much is simply that golfing
-takes them that long. I considered two ways around it:</p>
-<ul>
-<li><strong>Lower the thinking effort.</strong> Opus 5 at medium effort still submitted only a few times. On the small number of
-problems I tried, it couldn't match GPT-5.6 Luna. I don't think a leaderboard entry from that run would be a fair
-picture of what it can do.</li>
-<li><strong>Remove the time limit.</strong> That would be unfair to the models already tested under the 30-minute rule, and would
-need a much larger budget.</li>
-</ul>
-<p>Cost is another problem. Anthropic's terms don't allow a Claude subscription to be used in a third-party harness, so
-these runs would have to use the API. I estimate $200 to $500 for all 256 cells, depending on the model.
-It could cost more without the time limit. That's not a small amount.</p>
-<p>For now, I'm leaving these models off the leaderboard. I'll try again if the situation changes.</p>
+<h2 id="about-thinking-effort-and-the-30-minute-limit"><a href="#about/thinking-effort-and-the-30-minute-limit">Thinking effort and the 30-minute limit</a></h2>
+<p>In code golf, a working solution is just the starting point. The next challenge is to make it shorter without breaking
+it. A model can try as many improvements as it likes within its 30 minutes, but only submitted solutions that pass the
+tests count. A good idea left untested when time runs out cannot improve its score.</p>
+<p>Models have a <strong>thinking effort</strong> setting that controls how much time they tend to spend reasoning before answering
+or trying something. More thinking can help with a difficult problem, but it also leaves less time to test ideas.
+The highest setting is not necessarily the best fit for a timed contest.</p>
+<p>I ran into this with Anthropic models at <code>max</code>. On some harder problems, a model would submit a basic working solution,
+then spend the rest of the session thinking without submitting another improvement—even when it had already found a
+promising idea. Asking it to submit early and often did not reliably fix this.</p>
+<p>Anthropic's <a href="https://platform.claude.com/docs/en/build-with-claude/effort">highest setting, <code>max</code></a>, favors deep reasoning
+over speed. Its <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5-5#calibrate-effort">guidance for Opus 5.5</a>
+recommends testing which effort level works best for your task. Switching to <code>xhigh</code> (“extra high”),
+first tested with Claude Opus 5.5, worked much better: the model tried and submitted improvements rather than leaving
+them until it was too late.</p>
+<p>I therefore use <strong><code>xhigh</code> for Anthropic models</strong>, rather than <code>max</code>. The other models use their highest available
+thinking effort. Everyone still gets the same tools and the same 30-minute limit.</p>
 <h2 id="about-why-i-built-this"><a href="#about/why-i-built-this">Why I built this</a></h2>
 <p>I started this after OpenAI introduced GPT-6 Astra as <a href="https://openai.com/index/gpt-6-astra/">&quot;a new generation of
 intelligence&quot;</a>, and its president Greg Brockman ended the launch briefing with
@@ -317,8 +314,8 @@ memorize; it has to work out a solution for itself.</p>
 <h2 id="why-getting-a-working-solution"><a href="#why/getting-a-working-solution">Getting a working solution</a></h2>
 <p>Frontier models don't have much trouble getting these problems right. Every model with a complete run has an accepted
 solution in <strong>all 256 cells</strong>. If I only counted passing solutions, they would all have the same result.</p>
-<p>But their scores range from <strong>55.893%</strong> to <strong>84.612%</strong> in the original languages,
-and from <strong>48.023%</strong> to <strong>89.328%</strong> in the added ones. Once a solution works,
+<p>But their scores range from <strong>55.593%</strong> to <strong>89.389%</strong> in the original languages,
+and from <strong>47.779%</strong> to <strong>91.291%</strong> in the added ones. Once a solution works,
 there's still the question of how much shorter it could be. That's where the models start to differ.</p>
 <h2 id="why-scoring-by-byte-count"><a href="#why/scoring-by-byte-count">Scoring by byte count</a></h2>
 <ul>
@@ -327,7 +324,7 @@ judge deciding whether it's good code, and no points for style.</li>
 <li><strong>Fine-grained.</strong> Saving one byte always helps. The squared score makes the difference between a close solution and
 an even closer one matter.</li>
 <li><strong>Open-ended.</strong> We don't know the shortest possible answers. &quot;Best known&quot; just means nobody has found anything shorter
-yet. Models have already beaten the 2015 human record in <strong>45</strong> cells. Getting every problem
+yet. Models have already beaten the 2015 human record in <strong>58</strong> cells. Getting every problem
 right doesn't end the competition, and a new record gives everyone else something to aim for.</li>
 </ul>
 <h2 id="why-less-boilerplate-to-golf"><a href="#why/less-boilerplate-to-golf">Less boilerplate to golf</a></h2>
@@ -366,7 +363,7 @@ different way to represent the data. These are some examples I like from the mod
 <p><strong>Carries without carrying.</strong> <a href="#problems/02/scoreboard">Addition by hand</a> asks how many carries occur when you add two
 numbers column by column. Each carry turns ten in one column into one in the next, reducing the digit sum by 9. So
 the answer is (digit sum of a + digit sum of b − digit sum of a+b) ÷ 9. Every GPT model uses this in Python and Haskell.</p>
-<p><a href="#problems/02/scoreboard/gpt-6-astra-max-py">The shortest Python solution</a> avoids even the subtraction between digit
+<p><a href="#problems/02/scoreboard/gpt-6-astra-max-py">GPT-6 Astra's Python solution</a> avoids even the subtraction between digit
 sums. Instead of subtracting the digits of a+b, it adds the digits of 10⁵¹−1−(a+b). That's 51 nines minus a+b, so each
 digit is 9 minus the corresponding digit of a+b. Add up the digits in one string, divide by 9 and subtract 51.
 JavaScript and C++ don't have integers wide enough to add two 50-digit numbers here, so every GPT model still does
@@ -399,7 +396,7 @@ shares its row, column or diagonal. Three GPT models place the queen in row r an
 r + ci. Then two queens attack each other exactly when the fourth power of their difference is real.</p>
 <p>The directions a queen can move are the eight multiples of 45°. Taking the fourth power multiplies angles by four,
 putting exactly those directions on the real axis, at 0° or 180°. <a href="#problems/03/scoreboard/gpt-5.5-xhigh-py">GPT-5.5's version</a>
-is the shortest Python solution, at 110 bytes.</p>
+takes 110 bytes in Python.</p>
 </li>
 <li>
 <p><strong>A table in one number.</strong> <a href="#problems/32/scoreboard">Parenthesis sequence (hard)</a> counts the balanced subsequences in a
@@ -414,8 +411,8 @@ The lowest digit holds the answer, apart from the empty subsequence, which we su
 <li>
 <p><strong>One point instead of six faces.</strong> <a href="#problems/31/scoreboard">The Rolling Dice</a> asks whether a die is back in its
 starting orientation after each roll. Most solutions keep track of the faces. GPT-6 Astra's
-<a href="#problems/31/scoreboard/gpt-6-astra-max-py">Python</a> and <a href="#problems/31/scoreboard/gpt-6-astra-max-hs">Haskell</a>, the shortest
-in both languages, follow one point on a sphere around the die instead. Choose a point that no nontrivial rotation
+<a href="#problems/31/scoreboard/gpt-6-astra-max-py">Python</a> and <a href="#problems/31/scoreboard/gpt-6-astra-max-hs">Haskell</a> solutions
+follow one point on a sphere around the die instead. Choose a point that no nontrivial rotation
 of the die leaves in place, and it returns to its starting position exactly when the die does.</p>
 <p><a href="https://en.wikipedia.org/wiki/Stereographic_projection">Stereographic projection</a> maps the sphere to the complex
 plane. A roll in direction k, where k is one of 1, i, −1 or −i, becomes z → (z+k)/(1−z/k). Python can do this with
@@ -484,16 +481,44 @@ takes more than repeating familiar patterns; a model has to apply what it knows 
 to keep challenging afterwards. They put real time into finding shorter solutions. Beating those records means more
 to me than beating a reference answer nobody tried very hard to golf.</p>
 <h2 id="why-what-the-results-show-so-far"><a href="#why/what-the-results-show-so-far">What the results show so far</a></h2>
-<ul>
-<li>Humans still lead overall in the 2015 languages: <strong>89.369%</strong>, compared with <strong>84.612%</strong>
-for GPT-6 Astra.</li>
-<li>GPT-6 Astra has passed the humans in <strong>Haskell</strong> (87.051% vs 78.787%), but not in JavaScript, Python or C++.</li>
-<li>Models have beaten the 2015 records in <strong>45</strong> cells, including 23 in Haskell.
-That doesn't count the unranked oracle.</li>
-</ul>
+<p>Claude Opus 5.5 has overtaken the human baseline on <strong>Original</strong>, the combined score for the four 2015 languages:
+<strong>89.389%</strong>, compared with <strong>88.927%</strong> for humans. Its outstanding Haskell performance
+(94.475% vs 77.595%) more than makes up for its lower scores in the other three languages.</p>
+<p>That is not a sweep of the original languages. Humans still have substantial leads over the strongest models in
+<strong>Python and C++</strong>; <strong>JavaScript is closer</strong>. The model score below is the highest in each language, which need not
+come from the same model:</p>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th>Humans</th>
+<th>Best model</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JavaScript</td>
+<td>89.159%</td>
+<td>85.818%</td>
+</tr>
+<tr>
+<td>Python</td>
+<td>94.033%</td>
+<td>88.379%</td>
+</tr>
+<tr>
+<td>C++</td>
+<td>94.921%</td>
+<td>88.881%</td>
+</tr>
+</tbody>
+</table>
+<p>These human records combine the best submissions from the original contest and later challenges, not one person's
+30-minute run. Models have now beaten those records in <strong>58</strong> individual cells, including
+27 in Haskell. That count excludes the unranked oracle.</p>
 
 </section>
 </main>
-<script src="app.js?v=340ca89d0e27" defer></script>
+<script src="app.js?v=cfb9e3149941" defer></script>
 </body>
 </html>
