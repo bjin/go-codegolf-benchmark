@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>go/codegolf benchmark</title>
 <meta name="description" content="go/codegolf benchmark: frontier models vs. Google's 2015 code golfers.">
-<meta name="data-url" content="data.json?v=9b95bfddbf89">
-<link rel="stylesheet" href="style.css?v=6027383c2807">
+<meta name="data-url" content="data.json?v=0b38d0a6e5a7">
+<link rel="stylesheet" href="style.css?v=ce814a2a5985">
 <noscript><style>.loading{display:none}</style></noscript>
 <script>(function(){var t=null;try{t=localStorage.getItem("theme")}catch(e){}if(t!=="light"&&t!=="dark"){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.setAttribute("data-theme",t)})();</script>
 </head>
@@ -257,22 +257,49 @@ An AI model found a way to switch that error off from inside <a href="#problems/
 <li><strong>Isolation.</strong> Every execution starts fresh processes in an isolated container with no network access, and everything it started is cleaned up afterwards.</li>
 </ul>
 <h2 id="about-thinking-effort-and-the-30-minute-limit"><a href="#about/thinking-effort-and-the-30-minute-limit">Thinking effort and the 30-minute limit</a></h2>
-<p>In code golf, a working solution is just the starting point. The next challenge is to make it shorter without breaking
-it. A model can try as many improvements as it likes within its 30 minutes, but only submitted solutions that pass the
-tests count. A good idea left untested when time runs out cannot improve its score.</p>
-<p>Models have a <strong>thinking effort</strong> setting that controls how much time they tend to spend reasoning before answering
-or trying something. More thinking can help with a difficult problem, but it also leaves less time to test ideas.
-The highest setting is not necessarily the best fit for a timed contest.</p>
-<p>I ran into this with Anthropic models at <code>max</code>. On some harder problems, a model would submit a basic working solution,
-then spend the rest of the session thinking without submitting another improvement—even when it had already found a
-promising idea. Asking it to submit early and often did not reliably fix this.</p>
-<p>Anthropic's <a href="https://platform.claude.com/docs/en/build-with-claude/effort">highest setting, <code>max</code></a>, favors deep reasoning
-over speed. Its <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5-5#calibrate-effort">guidance for Opus 5.5</a>
-recommends testing which effort level works best for your task. Switching to <code>xhigh</code> (“extra high”),
-first tested with Claude Opus 5.5, worked much better: the model tried and submitted improvements rather than leaving
-them until it was too late.</p>
-<p>I therefore use <strong><code>xhigh</code> for Anthropic models</strong>, rather than <code>max</code>. The other models use their highest available
-thinking effort. Everyone still gets the same tools and the same 30-minute limit.</p>
+<p>Most models let you choose a <strong>thinking effort</strong>: roughly, how long they reason before they answer or act. More
+thinking can crack a hard problem, but here it shares the same 30 minutes with everything else. Golfing is a loop of
+trying an idea, testing it and submitting whatever passes, and only submitted solutions count. An idea still being
+thought through when time runs out scores nothing.</p>
+<p>So the highest setting isn't automatically the best one for this contest. I ran Claude Haiku 5.5 at both <code>max</code> and
+<code>xhigh</code> (“extra high”, one step down), and it shows both sides. Its <code>max</code> solution was the shorter of the two in
+159 cells and the longer in 53, and <code>max</code> scored higher overall.
+But in some cells it spent so long thinking that it ran out of time with little more than its first, ungolfed working
+solution. In <a href="#problems/04/scoreboard">Game of Life</a>, its
+<a href="#problems/04/scoreboard/claude-haiku-5.5-max-rkt">Racket solution</a> is still indented over six lines, at 329 bytes
+against 259 at <code>xhigh</code>, and its <a href="#problems/04/scoreboard/claude-haiku-5.5-max-gs">GolfScript</a> takes 137 bytes to
+<code>xhigh</code>'s 95. Telling a model to submit early and often doesn't reliably prevent this.</p>
+<p>Neither run got the most out of the model. Picking the shorter of its two solutions in each cell scores higher than
+both:</p>
+<table>
+<thead>
+<tr>
+<th>Claude Haiku 5.5</th>
+<th>Original</th>
+<th>Extended</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>xhigh</code></td>
+<td>62.475%</td>
+<td>59.659%</td>
+</tr>
+<tr>
+<td><code>max</code></td>
+<td>68.386%</td>
+<td>64.343%</td>
+</tr>
+<tr>
+<td>Shorter of the two in each cell</td>
+<td>70.307%</td>
+<td>67.661%</td>
+</tr>
+</tbody>
+</table>
+<p>Each model runs at its highest available setting, unless that setting tends to leave it thinking until time runs out;
+then it runs at <code>xhigh</code>. The leaderboard shows each run's setting next to its name, and both Haiku runs are on it.
+Everyone gets the same tools and the same 30-minute limit.</p>
 <h2 id="about-why-i-built-this"><a href="#about/why-i-built-this">Why I built this</a></h2>
 <p>I started this after OpenAI introduced GPT-6 Astra as <a href="https://openai.com/index/gpt-6-astra/">&quot;a new generation of
 intelligence&quot;</a>, and its president Greg Brockman ended the launch briefing with
@@ -519,6 +546,6 @@ come from the same model:</p>
 
 </section>
 </main>
-<script src="app.js?v=cfb9e3149941" defer></script>
+<script src="app.js?v=df12554849c9" defer></script>
 </body>
 </html>
