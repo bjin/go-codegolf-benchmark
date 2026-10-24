@@ -181,7 +181,8 @@ information to work with.</li>
 <li>An unsolved cell gets <strong>0</strong>.</li>
 <li><strong>Original</strong> averages the 128 cells in JavaScript, Python, C++ and Haskell, the languages with human records.
 <strong>Extended</strong> averages the other 128 cells, in Ruby, Raku, Racket and GolfScript. Humans have no Extended score because
-they have no entries in those languages, so the leaderboard sorts by Original by default.</li>
+they have no entries in those languages. By default the leaderboard ranks models by all 256 cells (the average of
+Original and Extended) and puts Humans just above the first model they match or beat on Original.</li>
 <li>The best known size can come from a human, a model or the oracle. If anyone finds a shorter solution, everyone else's
 score for that cell goes down.</li>
 <li>To score 100% across a whole run, you have to match the best known size in every cell.</li>
@@ -546,6 +547,6 @@ come from the same model:</p>
 
 </section>
 </main>
-<script src="app.js?v=ccad9b331369" defer></script>
+<script src="app.js?v=ddd2aae5dfde" defer></script>
 </body>
 </html>
