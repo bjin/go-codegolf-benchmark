@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>go/codegolf benchmark</title>
 <meta name="description" content="go/codegolf benchmark: frontier models vs. Google's 2015 code golfers.">
-<meta name="data-url" content="data.json?v=a1894931001d">
+<meta name="data-url" content="data.json?v=eb0fc3d58ef5">
 <link rel="stylesheet" href="style.css?v=ce814a2a5985">
 <noscript><style>.loading{display:none}</style></noscript>
 <script>(function(){var t=null;try{t=localStorage.getItem("theme")}catch(e){}if(t!=="light"&&t!=="dark"){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.setAttribute("data-theme",t)})();</script>
@@ -136,7 +136,7 @@ this time starting from the human records. See <a href="#about/known-best-and-th
 <p>A <strong>cell</strong> is one problem in one language. Each gets a fresh session with a <strong>30-minute wall-clock limit</strong>. The model
 receives the statement, the I/O specification, <strong>all the test cases</strong> and a short guide to the language. For GolfScript,
 it also gets the full language reference, since the language is small and not widely known.</p>
-<p>There are two tools:</p>
+<p>There are two tools, and both work in all eight languages:</p>
 <ul>
 <li><strong><code>submit</code></strong> runs a solution against all the test cases in the replicated sandbox.
 <ul>
@@ -146,7 +146,8 @@ it also gets the full language reference, since the language is small and not wi
 without a target, it's easy to decide a solution is short enough and stop.</li>
 </ul>
 </li>
-<li><strong><code>playground</code></strong> runs a complete program in Python, Ruby, Raku or GolfScript, using the same sandbox as submissions.
+<li><strong><code>playground</code></strong> runs a program in the same sandbox as submissions, with mostly the same environment: the same
+compiler or interpreter, compiler options and libraries.
 <ul>
 <li>It can preload the test cases as <code>inputs</code> and <code>outputs</code>, so the model can try its <code>g</code> on every case, compare the
 results with the expected outputs, or just examine the data.</li>
@@ -284,17 +285,17 @@ both:</p>
 <tr>
 <td><code>xhigh</code></td>
 <td>62.287%</td>
-<td>59.484%</td>
+<td>59.299%</td>
 </tr>
 <tr>
 <td><code>max</code></td>
 <td>68.198%</td>
-<td>64.137%</td>
+<td>63.996%</td>
 </tr>
 <tr>
 <td>Shorter of the two in each cell</td>
 <td>70.114%</td>
-<td>67.452%</td>
+<td>67.267%</td>
 </tr>
 </tbody>
 </table>
@@ -343,7 +344,7 @@ memorize; it has to work out a solution for itself.</p>
 <p>Frontier models don't have much trouble getting these problems right. Every model with a complete run has an accepted
 solution in <strong>all 256 cells</strong>. If I only counted passing solutions, they would all have the same result.</p>
 <p>But their scores range from <strong>55.438%</strong> to <strong>89.124%</strong> in the original languages,
-and from <strong>47.606%</strong> to <strong>90.990%</strong> in the added ones. Once a solution works,
+and from <strong>47.475%</strong> to <strong>90.671%</strong> in the added ones. Once a solution works,
 there's still the question of how much shorter it could be. That's where the models start to differ.</p>
 <h2 id="why-scoring-by-byte-count"><a href="#why/scoring-by-byte-count">Scoring by byte count</a></h2>
 <ul>
