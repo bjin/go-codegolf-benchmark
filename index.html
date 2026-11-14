@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>go/codegolf benchmark</title>
 <meta name="description" content="go/codegolf benchmark: frontier models vs. Google's 2015 code golfers.">
-<meta name="data-url" content="data.json?v=d5214ef642a8">
+<meta name="data-url" content="data.json?v=c006320c496c">
 <link rel="stylesheet" href="style.css?v=ce814a2a5985">
 <noscript><style>.loading{display:none}</style></noscript>
 <script>(function(){var t=null;try{t=localStorage.getItem("theme")}catch(e){}if(t!=="light"&&t!=="dark"){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.setAttribute("data-theme",t)})();</script>
@@ -284,18 +284,18 @@ both:</p>
 <tbody>
 <tr>
 <td><code>xhigh</code></td>
-<td>60.377%</td>
-<td>56.811%</td>
+<td>60.335%</td>
+<td>56.721%</td>
 </tr>
 <tr>
 <td><code>max</code></td>
-<td>66.202%</td>
-<td>61.390%</td>
+<td>66.144%</td>
+<td>61.299%</td>
 </tr>
 <tr>
 <td>Shorter of the two in each cell</td>
-<td>67.993%</td>
-<td>64.421%</td>
+<td>67.934%</td>
+<td>64.331%</td>
 </tr>
 </tbody>
 </table>
@@ -343,8 +343,8 @@ memorize; it has to work out a solution for itself.</p>
 <h2 id="why-getting-a-working-solution"><a href="#why/getting-a-working-solution">Getting a working solution</a></h2>
 <p>Frontier models don't have much trouble getting these problems right. Every model with a complete run has an accepted
 solution in <strong>all 256 cells</strong>. If I only counted passing solutions, they would all have the same result.</p>
-<p>But their scores range from <strong>53.696%</strong> to <strong>88.155%</strong> in the original languages,
-and from <strong>45.547%</strong> to <strong>89.462%</strong> in the added ones. Once a solution works,
+<p>But their scores range from <strong>53.653%</strong> to <strong>88.085%</strong> in the original languages,
+and from <strong>45.486%</strong> to <strong>89.369%</strong> in the added ones. Once a solution works,
 there's still the question of how much shorter it could be. That's where the models start to differ.</p>
 <h2 id="why-scoring-by-byte-count"><a href="#why/scoring-by-byte-count">Scoring by byte count</a></h2>
 <ul>
@@ -353,7 +353,7 @@ judge deciding whether it's good code, and no points for style.</li>
 <li><strong>Fine-grained.</strong> Saving one byte always helps. The squared score makes the difference between a close solution and
 an even closer one matter.</li>
 <li><strong>Open-ended.</strong> We don't know the shortest possible answers. &quot;Best known&quot; just means nobody has found anything shorter
-yet. Models have already beaten the 2015 human record in <strong>75</strong> cells. Getting every problem
+yet. Models have already beaten the 2015 human record in <strong>76</strong> cells. Getting every problem
 right doesn't end the competition, and a new record gives everyone else something to aim for.</li>
 </ul>
 <h2 id="why-less-boilerplate-to-golf"><a href="#why/less-boilerplate-to-golf">Less boilerplate to golf</a></h2>
@@ -511,8 +511,8 @@ to keep challenging afterwards. They put real time into finding shorter solution
 to me than beating a reference answer nobody tried very hard to golf.</p>
 <h2 id="why-what-the-results-show-so-far"><a href="#why/what-the-results-show-so-far">What the results show so far</a></h2>
 <p>Claude Opus 5.5 has overtaken the human baseline on <strong>Original</strong>, the combined score for the four 2015 languages:
-<strong>86.215%</strong>, compared with <strong>85.828%</strong> for humans. Its outstanding Haskell performance
-(89.851% vs 73.667%) more than makes up for its lower scores in the other three languages.</p>
+<strong>86.148%</strong>, compared with <strong>85.763%</strong> for humans. Its outstanding Haskell performance
+(89.780% vs 73.617%) more than makes up for its lower scores in the other three languages.</p>
 <p>That is not a sweep of the original languages. Humans still have substantial leads over the strongest models in
 <strong>Python and C++</strong>; <strong>JavaScript is closer</strong>. The model score below is the highest in each language, which need not
 come from the same model:</p>
@@ -537,13 +537,13 @@ come from the same model:</p>
 </tr>
 <tr>
 <td>C++</td>
-<td>92.883%</td>
-<td>88.117%</td>
+<td>92.673%</td>
+<td>87.907%</td>
 </tr>
 </tbody>
 </table>
 <p>These human records combine the best submissions from the original contest and later challenges, not one person's
-30-minute run. Models have now beaten those records in <strong>75</strong> individual cells, including
+30-minute run. Models have now beaten those records in <strong>76</strong> individual cells, including
 29 in Haskell. That count excludes the unranked oracle.</p>
 
 </section>
