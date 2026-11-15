@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>go/codegolf benchmark</title>
 <meta name="description" content="go/codegolf benchmark: frontier models vs. Google's 2015 code golfers.">
-<meta name="data-url" content="data.json?v=c006320c496c">
+<meta name="data-url" content="data.json?v=8b34147bbc60">
 <link rel="stylesheet" href="style.css?v=ce814a2a5985">
 <noscript><style>.loading{display:none}</style></noscript>
 <script>(function(){var t=null;try{t=localStorage.getItem("theme")}catch(e){}if(t!=="light"&&t!=="dark"){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.setAttribute("data-theme",t)})();</script>
@@ -40,7 +40,7 @@
 compare with our old records. Each model gets 30 minutes per problem in each of eight languages to make its solution
 as short as it can. The leaderboard scores the byte counts, not just whether the code works.</p>
 </blockquote>
-<nav class="page-toc" aria-label="Contents"><p class="toc-title">Contents</p><ol><li><a href="#about/where-the-problems-come-from-go-codegolf">Where the problems come from: go/codegolf</a></li><li><a href="#about/from-a-weekly-contest-to-a-benchmark">From a weekly contest to a benchmark</a></li><li><a href="#about/the-eight-languages">The eight languages</a></li><li><a href="#about/how-models-play">How models play</a></li><li><a href="#about/known-best-and-the-oracle">Known Best and the oracle</a></li><li><a href="#about/scoring">Scoring</a></li><li><a href="#about/technical-details">Technical details</a></li><li><a href="#about/thinking-effort-and-the-30-minute-limit">Thinking effort and the 30-minute limit</a></li><li><a href="#about/why-i-built-this">Why I built this</a></li></ol></nav><h2 id="about-where-the-problems-come-from-go-codegolf"><a href="#about/where-the-problems-come-from-go-codegolf">Where the problems come from: go/codegolf</a></h2>
+<nav class="page-toc" aria-label="Contents"><p class="toc-title">Contents</p><ol><li><a href="#about/where-the-problems-come-from-go-codegolf">Where the problems come from: go/codegolf</a></li><li><a href="#about/from-a-weekly-contest-to-a-benchmark">From a weekly contest to a benchmark</a></li><li><a href="#about/the-eight-languages">The eight languages</a></li><li><a href="#about/how-models-play">How models play</a></li><li><a href="#about/known-best-and-the-oracle">Known Best and the oracle</a></li><li><a href="#about/scoring">Scoring</a></li><li><a href="#about/contested-and-overall">Contested and Overall</a></li><li><a href="#about/technical-details">Technical details</a></li><li><a href="#about/thinking-effort-and-the-30-minute-limit">Thinking effort and the 30-minute limit</a></li><li><a href="#about/why-i-built-this">Why I built this</a></li></ol></nav><h2 id="about-where-the-problems-come-from-go-codegolf"><a href="#about/where-the-problems-come-from-go-codegolf">Where the problems come from: go/codegolf</a></h2>
 <p>In 2015, when I was at Google, I spent a lot of time on an internal site called <strong>go/codegolf</strong>. There was one problem
 a week, and we competed to write the shortest program that solved it. Most of the regulars were code-golf enthusiasts.</p>
 <p>Each problem went through three phases:</p>
@@ -132,6 +132,8 @@ Those byte counts are the human records used here. <strong>The human solutions t
 <p>There are no 2015 human records for the last four languages. I used an oracle run to get a reference size for each cell,
 though models have beaten those sizes in some cells. Later, I ran the oracle on the original four languages as well,
 this time starting from the human records. See <a href="#about/known-best-and-the-oracle">Known Best and the oracle</a>.</p>
+<p>Haskell has human records too, but they are much weaker than the other three, so the humans' headline score leaves
+Haskell out. See <a href="#about/contested-and-overall">Contested and Overall</a>.</p>
 <h2 id="about-how-models-play"><a href="#about/how-models-play">How models play</a></h2>
 <p>A <strong>cell</strong> is one problem in one language. Each gets a fresh session with a <strong>30-minute wall-clock limit</strong>. The model
 receives the statement, the I/O specification, <strong>all the test cases</strong> and a short guide to the language. For GolfScript,
@@ -180,10 +182,8 @@ information to work with.</li>
 <ul>
 <li>Match the best known size and you get <strong>100%</strong>. A solution 10% longer gets <strong>82.6%</strong>; twice as long gets <strong>25%</strong>.</li>
 <li>An unsolved cell gets <strong>0</strong>.</li>
-<li><strong>Original</strong> averages the 128 cells in JavaScript, Python, C++ and Haskell, the languages with human records.
-<strong>Extended</strong> averages the other 128 cells, in Ruby, Raku, Racket and GolfScript. Humans have no Extended score because
-they have no entries in those languages. By default the leaderboard ranks models by all 256 cells (the average of
-Original and Extended) and puts Humans just above the first model they match or beat on Original.</li>
+<li><strong>Contested</strong> averages the 96 cells in JavaScript, Python and C++. <strong>Overall</strong> averages all 256 cells, in all eight
+languages. See <a href="#about/contested-and-overall">Contested and Overall</a> for why Contested leaves out Haskell.</li>
 <li>The best known size can come from a human, a model or the oracle. If anyone finds a shorter solution, everyone else's
 score for that cell goes down.</li>
 <li>To score 100% across a whole run, you have to match the best known size in every cell.</li>
@@ -191,6 +191,28 @@ score for that cell goes down.</li>
 <p>A gold mark on a problem's scoreboard means that solution matches the best known size. A filled mark means no other
 competitor has matched it; an outlined mark means a tie. Humans count as competitors, but the oracle doesn't. If the
 oracle's Known Best is shorter than every competitor's solution, nobody gets a gold mark.</p>
+<h2 id="about-contested-and-overall"><a href="#about/contested-and-overall">Contested and Overall</a></h2>
+<p>The leaderboard has two headline scores:</p>
+<ul>
+<li><strong>Contested</strong> averages the 96 cells in JavaScript, Python and C++.</li>
+<li><strong>Overall</strong> averages all 256 cells: the same three languages plus Haskell, Ruby, Raku, Racket and GolfScript.</li>
+</ul>
+<p>Contested covers only the languages where the human records make a strong reference: the ones the humans really
+contested. In 2015, JavaScript, Python and C++ were the languages most go/codegolf regulars golfed in. Each of those
+scoreboards had a crowd of enthusiasts competing on it for a week, and the challenge phase kept the best of them
+improving it long after. Eleven years later, those records are still competitive with frontier models: see
+<a href="#why/what-the-results-show-so-far">What the results show so far</a>.</p>
+<p>Haskell is different. The site supported it and every problem here has a human Haskell record, but only a few regulars
+golfed in it. I suspect that mostly reflects how few Haskell users there were at Google in 2015, not how golfable the
+language is. With so few people competing, many Haskell records never got the attention the others did, and models
+have already beaten 29 of the 32. Counting Haskell in the human score would measure how few of
+us wrote Haskell, not how good the people who golfed were, so Contested leaves it out.</p>
+<p>Haskell still counts like any other language everywhere else. The human Haskell records still set best-known sizes,
+appear on the problem scoreboards and count in each model's Overall score.</p>
+<p>Humans have no Overall score, because they have no entries in Ruby, Raku, Racket or GolfScript. By default the
+leaderboard ranks models by Overall and puts Humans just above the first model they match or beat on Contested. Each
+problem's full scoreboard ranks models by their combined score in all eight languages on that problem, and puts Humans
+just above the first model they match or beat in JavaScript, Python, C++ and Haskell combined.</p>
 <h2 id="about-technical-details"><a href="#about/technical-details">Technical details</a></h2>
 <table>
 <thead>
@@ -277,25 +299,25 @@ both:</p>
 <thead>
 <tr>
 <th>Claude Haiku 5.5</th>
-<th>Original</th>
-<th>Extended</th>
+<th>Contested</th>
+<th>Overall</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>xhigh</code></td>
-<td>60.335%</td>
-<td>56.721%</td>
+<td>59.587%</td>
+<td>58.528%</td>
 </tr>
 <tr>
 <td><code>max</code></td>
-<td>66.144%</td>
-<td>61.299%</td>
+<td>64.963%</td>
+<td>63.722%</td>
 </tr>
 <tr>
 <td>Shorter of the two in each cell</td>
-<td>67.934%</td>
-<td>64.331%</td>
+<td>66.887%</td>
+<td>66.133%</td>
 </tr>
 </tbody>
 </table>
@@ -343,9 +365,10 @@ memorize; it has to work out a solution for itself.</p>
 <h2 id="why-getting-a-working-solution"><a href="#why/getting-a-working-solution">Getting a working solution</a></h2>
 <p>Frontier models don't have much trouble getting these problems right. Every model with a complete run has an accepted
 solution in <strong>all 256 cells</strong>. If I only counted passing solutions, they would all have the same result.</p>
-<p>But their scores range from <strong>53.653%</strong> to <strong>88.085%</strong> in the original languages,
-and from <strong>45.486%</strong> to <strong>89.369%</strong> in the added ones. Once a solution works,
-there's still the question of how much shorter it could be. That's where the models start to differ.</p>
+<p>But their scores range from <strong>53.988%</strong> to <strong>86.541%</strong> on Contested (JavaScript,
+Python and C++), and from <strong>49.569%</strong> to <strong>88.727%</strong> across all eight languages.
+Once a solution works, there's still the question of how much shorter it could be. That's where the models start to
+differ.</p>
 <h2 id="why-scoring-by-byte-count"><a href="#why/scoring-by-byte-count">Scoring by byte count</a></h2>
 <ul>
 <li><strong>Exact.</strong> Either the program passes or it doesn't. If it passes, we count its bytes. There's no human rater or LLM
@@ -510,12 +533,10 @@ takes more than repeating familiar patterns; a model has to apply what it knows 
 to keep challenging afterwards. They put real time into finding shorter solutions. Beating those records means more
 to me than beating a reference answer nobody tried very hard to golf.</p>
 <h2 id="why-what-the-results-show-so-far"><a href="#why/what-the-results-show-so-far">What the results show so far</a></h2>
-<p>Claude Opus 5.5 has overtaken the human baseline on <strong>Original</strong>, the combined score for the four 2015 languages:
-<strong>86.148%</strong>, compared with <strong>85.763%</strong> for humans. Its outstanding Haskell performance
-(89.780% vs 73.617%) more than makes up for its lower scores in the other three languages.</p>
-<p>That is not a sweep of the original languages. Humans still have substantial leads over the strongest models in
-<strong>Python and C++</strong>; <strong>JavaScript is closer</strong>. The model score below is the highest in each language, which need not
-come from the same model:</p>
+<p>Humans still lead every model on <strong>Contested</strong>, the combined score for JavaScript, Python and C++:
+<strong>89.812%</strong>, compared with <strong>86.541%</strong> for the best model. Their leads over the strongest
+models are substantial in <strong>Python and C++</strong>; <strong>JavaScript is closer</strong>. The model score below is the highest in each
+language, which need not come from the same model:</p>
 <table>
 <thead>
 <tr>
@@ -542,12 +563,15 @@ come from the same model:</p>
 </tr>
 </tbody>
 </table>
+<p>Haskell is the exception. Claude Opus 5.5 scores 89.780% there, against 73.617% for the human records, which
+never had many Googlers competing on them. That is why Contested leaves Haskell out; see
+<a href="#about/contested-and-overall">Contested and Overall</a>.</p>
 <p>These human records combine the best submissions from the original contest and later challenges, not one person's
 30-minute run. Models have now beaten those records in <strong>76</strong> individual cells, including
 29 in Haskell. That count excludes the unranked oracle.</p>
 
 </section>
 </main>
-<script src="app.js?v=ddd2aae5dfde" defer></script>
+<script src="app.js?v=e332b5cab8ff" defer></script>
 </body>
 </html>
