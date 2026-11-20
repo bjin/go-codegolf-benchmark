@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>go/codegolf benchmark</title>
 <meta name="description" content="go/codegolf benchmark: frontier models vs. Google's 2015 code golfers.">
-<meta name="data-url" content="data.json?v=057d0668c4e3">
-<link rel="stylesheet" href="style.css?v=ce814a2a5985">
+<meta name="data-url" content="data.json?v=518afeea4349">
+<link rel="stylesheet" href="style.css?v=12825136ef81">
 <noscript><style>.loading{display:none}</style></noscript>
 <script>(function(){var t=null;try{t=localStorage.getItem("theme")}catch(e){}if(t!=="light"&&t!=="dark"){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.setAttribute("data-theme",t)})();</script>
 </head>
@@ -174,7 +174,7 @@ with other models as well.</p>
 <ul>
 <li>The oracle is <strong>unranked</strong>; it only supplies best-known sizes.</li>
 <li>When it beats every competitor in a cell, the Problems page shows its byte count as <strong>Known Best</strong>, but never its code.</li>
-<li>In 138 of the 256 cells, the oracle's solution is shorter than every competitor's. The oracle had
+<li>In 85 of the 256 cells, the oracle's solution is shorter than every competitor's. The oracle had
 much more time and information to work with.</li>
 </ul>
 <h2 id="about-scoring"><a href="#about/scoring">Scoring</a></h2>
@@ -206,14 +206,16 @@ those records are still competitive with frontier models: see
 <p>Haskell is different. The site supported it and every problem here has a human Haskell record, but only a few regulars
 golfed in it. I suspect that mostly reflects how few Haskell users there were at Google in 2015, not how golfable the
 language is. With so few people competing, many Haskell records never got the attention the others did, and models
-have already beaten 29 of the 32. Counting Haskell in the human score would measure how few of
+have already beaten 31 of the 32. Counting Haskell in the human score would measure how few of
 us wrote Haskell, not how good the people who golfed were, so JS/PY/C++ leaves it out.</p>
 <p>Haskell still counts like any other language everywhere else. The human Haskell records still set best-known sizes,
 appear on the problem scoreboards and count in each model's Overall score.</p>
 <p>Humans have no Overall score, because they have no entries in Ruby, Raku, Racket or GolfScript. By default the
 leaderboard ranks models by Overall and puts Humans just above the first model they match or beat on JS/PY/C++. Each
 problem's full scoreboard ranks models by their combined score in all eight languages on that problem, and puts Humans
-just above the first model they match or beat in JavaScript, Python, C++ and Haskell combined.</p>
+just above the first model they match or beat in JavaScript, Python, C++ and Haskell combined. On the leaderboard, runs
+still in progress go below every complete one in any order, the earliest-released model first, with their partial
+scores dimmed.</p>
 <h2 id="about-technical-details"><a href="#about/technical-details">Technical details</a></h2>
 <table>
 <thead>
@@ -307,18 +309,18 @@ both:</p>
 <tbody>
 <tr>
 <td><code>xhigh</code></td>
-<td>58.004%</td>
-<td>59.163%</td>
+<td>57.592%</td>
+<td>58.906%</td>
 </tr>
 <tr>
 <td><code>max</code></td>
-<td>63.172%</td>
-<td>64.489%</td>
+<td>62.661%</td>
+<td>64.168%</td>
 </tr>
 <tr>
 <td>Shorter of the two in each cell</td>
-<td>65.545%</td>
-<td>66.398%</td>
+<td>65.026%</td>
+<td>66.060%</td>
 </tr>
 </tbody>
 </table>
@@ -366,8 +368,8 @@ memorize; it has to work out a solution for itself.</p>
 <h2 id="why-getting-a-working-solution"><a href="#why/getting-a-working-solution">Getting a working solution</a></h2>
 <p>Frontier models don't have much trouble getting these problems right. Every model with a complete run has an accepted
 solution in <strong>all 256 cells</strong>. If I only counted passing solutions, they would all have the same result.</p>
-<p>But their scores range from <strong>49.133%</strong> to <strong>87.889%</strong> across all eight languages, and
-from <strong>53.560%</strong> to <strong>85.887%</strong> on JS/PY/C++ (JavaScript, Python and C++ alone).
+<p>But their scores range from <strong>48.727%</strong> to <strong>93.478%</strong> across all eight languages, and
+from <strong>53.246%</strong> to <strong>92.923%</strong> on JS/PY/C++ (JavaScript, Python and C++ alone).
 Once a solution works, there's still the question of how much shorter it could be. That's where the models start to
 differ.</p>
 <h2 id="why-scoring-by-byte-count"><a href="#why/scoring-by-byte-count">Scoring by byte count</a></h2>
@@ -377,7 +379,7 @@ judge deciding whether it's good code, and no points for style.</li>
 <li><strong>Fine-grained.</strong> Saving one byte always helps. The squared score makes the difference between a close solution and
 an even closer one matter.</li>
 <li><strong>Open-ended.</strong> We don't know the shortest possible answers. &quot;Best known&quot; just means nobody has found anything shorter
-yet. Models have already beaten the 2015 human record in <strong>76</strong> cells. Getting every problem
+yet. Models have already beaten the 2015 human record in <strong>92</strong> cells. Getting every problem
 right doesn't end the competition, and a new record gives everyone else something to aim for.</li>
 </ul>
 <h2 id="why-less-boilerplate-to-golf"><a href="#why/less-boilerplate-to-golf">Less boilerplate to golf</a></h2>
@@ -534,42 +536,52 @@ takes more than repeating familiar patterns; a model has to apply what it knows 
 to keep challenging afterwards. They put real time into finding shorter solutions. Beating those records means more
 to me than beating a reference answer nobody tried very hard to golf.</p>
 <h2 id="why-what-the-results-show-so-far"><a href="#why/what-the-results-show-so-far">What the results show so far</a></h2>
-<p>Humans still lead every model on <strong>JS/PY/C++</strong>, the combined score for JavaScript, Python and C++:
-<strong>89.187%</strong>, compared with <strong>85.887%</strong> for the best model. The lead doesn't rest on one
-strong language: humans are ahead of the best model by a few points in each of the three. The model score below is the
-highest in each language, which need not come from the same model:</p>
+<p>GPT-6.2 Astra is the first frontier model to surpass the human records on <strong>JS/PY/C++</strong>, the combined score for
+JavaScript, Python and C++: <strong>92.923%</strong>, compared with <strong>88.642%</strong> for humans. So far it's the
+only model above them. Its lead doesn't rest on one strong language: it scores above the humans in each of the three.</p>
 <table>
 <thead>
 <tr>
 <th>Language</th>
 <th>Humans</th>
-<th>Best model</th>
+<th>GPT-6.2 Astra</th>
+<th>Cells humans still hold</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>JavaScript</td>
-<td>84.084%</td>
-<td>81.646%</td>
+<td>83.203%</td>
+<td>91.358%</td>
+<td>5 of 32</td>
 </tr>
 <tr>
 <td>Python</td>
-<td>91.482%</td>
-<td>88.782%</td>
+<td>90.954%</td>
+<td>93.471%</td>
+<td>5 of 32</td>
 </tr>
 <tr>
 <td>C++</td>
-<td>91.994%</td>
-<td>87.233%</td>
+<td>91.769%</td>
+<td>93.940%</td>
+<td>5 of 32</td>
+</tr>
+<tr>
+<td><strong>JS/PY/C++</strong></td>
+<td><strong>88.642%</strong></td>
+<td><strong>92.923%</strong></td>
+<td><strong>15 of 96</strong></td>
 </tr>
 </tbody>
 </table>
 <p>These human records combine the best submissions from the original contest and later challenges, not one person's
-30-minute run. Even so, models have already beaten them in <strong>47</strong> of the 96 cells. That count
-excludes the unranked oracle.</p>
+30-minute run. Models have beaten them in <strong>61</strong> of the 96 cells, but in
+<strong>15</strong> the human solution is still shorter than every model's: those are the cells humans still
+hold. Both counts exclude the unranked oracle.</p>
 
 </section>
 </main>
-<script src="app.js?v=03200a9b8132" defer></script>
+<script src="app.js?v=1c0499b915ef" defer></script>
 </body>
 </html>
