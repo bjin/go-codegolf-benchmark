@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>go/codegolf benchmark</title>
 <meta name="description" content="go/codegolf benchmark: frontier models vs. Google's 2015 code golfers.">
-<meta name="data-url" content="data.json?v=fc8a20121d32">
+<meta name="data-url" content="data.json?v=9457a13266eb">
 <link rel="stylesheet" href="style.css?v=12825136ef81">
 <noscript><style>.loading{display:none}</style></noscript>
 <script>(function(){var t=null;try{t=localStorage.getItem("theme")}catch(e){}if(t!=="light"&&t!=="dark"){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.setAttribute("data-theme",t)})();</script>
@@ -174,7 +174,7 @@ with other models as well.</p>
 <ul>
 <li>The oracle is <strong>unranked</strong>; it only supplies best-known sizes.</li>
 <li>When it beats every competitor in a cell, the Problems page shows its byte count as <strong>Known Best</strong>, but never its code.</li>
-<li>In 85 of the 256 cells, the oracle's solution is shorter than every competitor's. The oracle had
+<li>In 106 of the 256 cells, the oracle's solution is shorter than every competitor's. The oracle had
 much more time and information to work with.</li>
 </ul>
 <h2 id="about-scoring"><a href="#about/scoring">Scoring</a></h2>
@@ -309,18 +309,18 @@ both:</p>
 <tbody>
 <tr>
 <td><code>xhigh</code></td>
-<td>57.592%</td>
-<td>58.906%</td>
+<td>57.150%</td>
+<td>58.562%</td>
 </tr>
 <tr>
 <td><code>max</code></td>
-<td>62.661%</td>
-<td>64.168%</td>
+<td>62.166%</td>
+<td>63.781%</td>
 </tr>
 <tr>
 <td>Shorter of the two in each cell</td>
-<td>65.026%</td>
-<td>66.060%</td>
+<td>64.513%</td>
+<td>65.672%</td>
 </tr>
 </tbody>
 </table>
@@ -368,8 +368,8 @@ memorize; it has to work out a solution for itself.</p>
 <h2 id="why-getting-a-working-solution"><a href="#why/getting-a-working-solution">Getting a working solution</a></h2>
 <p>Frontier models don't have much trouble getting these problems right. Every model with a complete run has an accepted
 solution in <strong>all 256 cells</strong>. If I only counted passing solutions, they would all have the same result.</p>
-<p>But their scores range from <strong>48.727%</strong> to <strong>93.478%</strong> across all eight languages, and
-from <strong>53.246%</strong> to <strong>92.923%</strong> on JS/PY/C++ (JavaScript, Python and C++ alone).
+<p>But their scores range from <strong>48.345%</strong> to <strong>92.625%</strong> across all eight languages, and
+from <strong>52.945%</strong> to <strong>92.266%</strong> on JS/PY/C++ (JavaScript, Python and C++ alone).
 Once a solution works, there's still the question of how much shorter it could be. That's where the models start to
 differ.</p>
 <h2 id="why-scoring-by-byte-count"><a href="#why/scoring-by-byte-count">Scoring by byte count</a></h2>
@@ -537,7 +537,7 @@ to keep challenging afterwards. They put real time into finding shorter solution
 to me than beating a reference answer nobody tried very hard to golf.</p>
 <h2 id="why-what-the-results-show-so-far"><a href="#why/what-the-results-show-so-far">What the results show so far</a></h2>
 <p>GPT-6.2 Astra is the first frontier model to surpass the human records on <strong>JS/PY/C++</strong>, the combined score for
-JavaScript, Python and C++: <strong>92.923%</strong>, compared with <strong>88.642%</strong> for humans. So far it's the
+JavaScript, Python and C++: <strong>92.266%</strong>, compared with <strong>88.052%</strong> for humans. So far it's the
 only model above them. Its lead doesn't rest on one strong language: it scores above the humans in each of the three.</p>
 <table>
 <thead>
@@ -551,26 +551,26 @@ only model above them. Its lead doesn't rest on one strong language: it scores a
 <tbody>
 <tr>
 <td>JavaScript</td>
-<td>83.203%</td>
-<td>91.358%</td>
+<td>82.018%</td>
+<td>90.007%</td>
 <td>5 of 32</td>
 </tr>
 <tr>
 <td>Python</td>
-<td>90.954%</td>
-<td>93.471%</td>
+<td>90.727%</td>
+<td>93.216%</td>
 <td>5 of 32</td>
 </tr>
 <tr>
 <td>C++</td>
-<td>91.769%</td>
-<td>93.940%</td>
+<td>91.412%</td>
+<td>93.577%</td>
 <td>5 of 32</td>
 </tr>
 <tr>
 <td><strong>JS/PY/C++</strong></td>
-<td><strong>88.642%</strong></td>
-<td><strong>92.923%</strong></td>
+<td><strong>88.052%</strong></td>
+<td><strong>92.266%</strong></td>
 <td><strong>15 of 96</strong></td>
 </tr>
 </tbody>
