@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>go/codegolf benchmark</title>
 <meta name="description" content="go/codegolf benchmark: frontier models vs. Google's 2015 code golfers.">
-<meta name="data-url" content="data.json?v=9457a13266eb">
+<meta name="data-url" content="data.json?v=02448683e1ac">
 <link rel="stylesheet" href="style.css?v=12825136ef81">
 <noscript><style>.loading{display:none}</style></noscript>
 <script>(function(){var t=null;try{t=localStorage.getItem("theme")}catch(e){}if(t!=="light"&&t!=="dark"){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.setAttribute("data-theme",t)})();</script>
@@ -174,7 +174,7 @@ with other models as well.</p>
 <ul>
 <li>The oracle is <strong>unranked</strong>; it only supplies best-known sizes.</li>
 <li>When it beats every competitor in a cell, the Problems page shows its byte count as <strong>Known Best</strong>, but never its code.</li>
-<li>In 106 of the 256 cells, the oracle's solution is shorter than every competitor's. The oracle had
+<li>In 126 of the 256 cells, the oracle's solution is shorter than every competitor's. The oracle had
 much more time and information to work with.</li>
 </ul>
 <h2 id="about-scoring"><a href="#about/scoring">Scoring</a></h2>
@@ -290,7 +290,7 @@ trying an idea, testing it and submitting whatever passes, and only submitted so
 thought through when time runs out scores nothing.</p>
 <p>So the highest setting isn't automatically the best one for this contest. I ran Claude Haiku 5.5 at both <code>max</code> and
 <code>xhigh</code> (“extra high”, one step down), and it shows both sides. Its <code>max</code> solution was the shorter of the two in
-159 cells and the longer in 53, and <code>max</code> scored higher overall.
+160 cells and the longer in 52, and <code>max</code> scored higher overall.
 But in some cells it spent so long thinking that it ran out of time with little more than its first, ungolfed working
 solution. In <a href="#problems/04/scoreboard">Game of Life</a>, its
 <a href="#problems/04/scoreboard/claude-haiku-5.5-max-rkt">Racket solution</a> is still indented over six lines, at 329 bytes
@@ -309,18 +309,18 @@ both:</p>
 <tbody>
 <tr>
 <td><code>xhigh</code></td>
-<td>57.150%</td>
-<td>58.562%</td>
+<td>56.801%</td>
+<td>58.655%</td>
 </tr>
 <tr>
 <td><code>max</code></td>
-<td>62.166%</td>
-<td>63.781%</td>
+<td>61.837%</td>
+<td>63.987%</td>
 </tr>
 <tr>
 <td>Shorter of the two in each cell</td>
-<td>64.513%</td>
-<td>65.672%</td>
+<td>64.145%</td>
+<td>65.836%</td>
 </tr>
 </tbody>
 </table>
@@ -368,8 +368,8 @@ memorize; it has to work out a solution for itself.</p>
 <h2 id="why-getting-a-working-solution"><a href="#why/getting-a-working-solution">Getting a working solution</a></h2>
 <p>Frontier models don't have much trouble getting these problems right. Every model with a complete run has an accepted
 solution in <strong>all 256 cells</strong>. If I only counted passing solutions, they would all have the same result.</p>
-<p>But their scores range from <strong>48.345%</strong> to <strong>92.625%</strong> across all eight languages, and
-from <strong>52.945%</strong> to <strong>92.266%</strong> on JS/PY/C++ (JavaScript, Python and C++ alone).
+<p>But their scores range from <strong>47.977%</strong> to <strong>91.941%</strong> across all eight languages, and
+from <strong>52.911%</strong> to <strong>92.265%</strong> on JS/PY/C++ (JavaScript, Python and C++ alone).
 Once a solution works, there's still the question of how much shorter it could be. That's where the models start to
 differ.</p>
 <h2 id="why-scoring-by-byte-count"><a href="#why/scoring-by-byte-count">Scoring by byte count</a></h2>
@@ -379,7 +379,7 @@ judge deciding whether it's good code, and no points for style.</li>
 <li><strong>Fine-grained.</strong> Saving one byte always helps. The squared score makes the difference between a close solution and
 an even closer one matter.</li>
 <li><strong>Open-ended.</strong> We don't know the shortest possible answers. &quot;Best known&quot; just means nobody has found anything shorter
-yet. Models have already beaten the 2015 human record in <strong>92</strong> cells. Getting every problem
+yet. Models have already beaten the 2015 human record in <strong>93</strong> cells. Getting every problem
 right doesn't end the competition, and a new record gives everyone else something to aim for.</li>
 </ul>
 <h2 id="why-less-boilerplate-to-golf"><a href="#why/less-boilerplate-to-golf">Less boilerplate to golf</a></h2>
@@ -537,7 +537,7 @@ to keep challenging afterwards. They put real time into finding shorter solution
 to me than beating a reference answer nobody tried very hard to golf.</p>
 <h2 id="why-what-the-results-show-so-far"><a href="#why/what-the-results-show-so-far">What the results show so far</a></h2>
 <p>GPT-6.2 Astra is the first frontier model to surpass the human records on <strong>JS/PY/C++</strong>, the combined score for
-JavaScript, Python and C++: <strong>92.266%</strong>, compared with <strong>88.052%</strong> for humans. So far it's the
+JavaScript, Python and C++: <strong>92.265%</strong>, compared with <strong>87.533%</strong> for humans. So far it's the
 only model above them. Its lead doesn't rest on one strong language: it scores above the humans in each of the three.</p>
 <table>
 <thead>
@@ -551,33 +551,33 @@ only model above them. Its lead doesn't rest on one strong language: it scores a
 <tbody>
 <tr>
 <td>JavaScript</td>
-<td>82.018%</td>
-<td>90.007%</td>
-<td>5 of 32</td>
+<td>80.980%</td>
+<td>90.555%</td>
+<td>4 of 32</td>
 </tr>
 <tr>
 <td>Python</td>
-<td>90.727%</td>
-<td>93.216%</td>
+<td>90.579%</td>
+<td>93.049%</td>
 <td>5 of 32</td>
 </tr>
 <tr>
 <td>C++</td>
-<td>91.412%</td>
-<td>93.577%</td>
+<td>91.039%</td>
+<td>93.190%</td>
 <td>5 of 32</td>
 </tr>
 <tr>
 <td><strong>JS/PY/C++</strong></td>
-<td><strong>88.052%</strong></td>
-<td><strong>92.266%</strong></td>
-<td><strong>15 of 96</strong></td>
+<td><strong>87.533%</strong></td>
+<td><strong>92.265%</strong></td>
+<td><strong>14 of 96</strong></td>
 </tr>
 </tbody>
 </table>
 <p>These human records combine the best submissions from the original contest and later challenges, not one person's
-30-minute run. Models have beaten them in <strong>61</strong> of the 96 cells, but in
-<strong>15</strong> the human solution is still shorter than every model's: those are the cells humans still
+30-minute run. Models have beaten them in <strong>62</strong> of the 96 cells, but in
+<strong>14</strong> the human solution is still shorter than every model's: those are the cells humans still
 hold. Both counts exclude the unranked oracle.</p>
 
 </section>
