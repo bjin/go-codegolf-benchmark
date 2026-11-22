@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>go/codegolf benchmark</title>
 <meta name="description" content="go/codegolf benchmark: frontier models vs. Google's 2015 code golfers.">
-<meta name="data-url" content="data.json?v=02448683e1ac">
+<meta name="data-url" content="data.json?v=7c9f74c2ca8a">
 <link rel="stylesheet" href="style.css?v=12825136ef81">
 <noscript><style>.loading{display:none}</style></noscript>
 <script>(function(){var t=null;try{t=localStorage.getItem("theme")}catch(e){}if(t!=="light"&&t!=="dark"){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.setAttribute("data-theme",t)})();</script>
@@ -309,17 +309,17 @@ both:</p>
 <tbody>
 <tr>
 <td><code>xhigh</code></td>
-<td>56.801%</td>
+<td>56.796%</td>
 <td>58.655%</td>
 </tr>
 <tr>
 <td><code>max</code></td>
-<td>61.837%</td>
+<td>61.832%</td>
 <td>63.987%</td>
 </tr>
 <tr>
 <td>Shorter of the two in each cell</td>
-<td>64.145%</td>
+<td>64.140%</td>
 <td>65.836%</td>
 </tr>
 </tbody>
@@ -368,7 +368,7 @@ memorize; it has to work out a solution for itself.</p>
 <h2 id="why-getting-a-working-solution"><a href="#why/getting-a-working-solution">Getting a working solution</a></h2>
 <p>Frontier models don't have much trouble getting these problems right. Every model with a complete run has an accepted
 solution in <strong>all 256 cells</strong>. If I only counted passing solutions, they would all have the same result.</p>
-<p>But their scores range from <strong>47.977%</strong> to <strong>91.941%</strong> across all eight languages, and
+<p>But their scores range from <strong>47.975%</strong> to <strong>91.934%</strong> across all eight languages, and
 from <strong>52.911%</strong> to <strong>92.265%</strong> on JS/PY/C++ (JavaScript, Python and C++ alone).
 Once a solution works, there's still the question of how much shorter it could be. That's where the models start to
 differ.</p>
