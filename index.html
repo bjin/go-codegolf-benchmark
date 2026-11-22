@@ -6,7 +6,7 @@
 <title>go/codegolf benchmark</title>
 <meta name="description" content="go/codegolf benchmark: frontier models vs. Google's 2015 code golfers.">
 <meta name="data-url" content="data.json?v=7c9f74c2ca8a">
-<link rel="stylesheet" href="style.css?v=12825136ef81">
+<link rel="stylesheet" href="style.css?v=0d00154a341f">
 <noscript><style>.loading{display:none}</style></noscript>
 <script>(function(){var t=null;try{t=localStorage.getItem("theme")}catch(e){}if(t!=="light"&&t!=="dark"){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.setAttribute("data-theme",t)})();</script>
 </head>
@@ -418,64 +418,114 @@ different way to represent the data. These are some examples I like from the mod
 <li>
 <p><strong>Carries without carrying.</strong> <a href="#problems/02/scoreboard">Addition by hand</a> asks how many carries occur when you add two
 numbers column by column. Each carry turns ten in one column into one in the next, reducing the digit sum by 9. So
-the answer is (digit sum of a + digit sum of b − digit sum of a+b) ÷ 9. Every GPT model uses this in Python and Haskell.</p>
-<p><a href="#problems/02/scoreboard/gpt-6-astra-max-py">GPT-6 Astra's Python solution</a> avoids even the subtraction between digit
-sums. Instead of subtracting the digits of a+b, it adds the digits of 10⁵¹−1−(a+b). That's 51 nines minus a+b, so each
-digit is 9 minus the corresponding digit of a+b. Add up the digits in one string, divide by 9 and subtract 51.
-JavaScript and C++ don't have integers wide enough to add two 50-digit numbers here, so every GPT model still does
-the addition column by column in those languages.</p>
+the answer is (digit sum of a + digit sum of b − digit sum of a+b) ÷ 9, and most models' Python solutions compute
+exactly that. <a href="#problems/02/scoreboard/gemini-4-carbon-high-py">Gemini 4 Carbon's Python</a> needs neither the
+subtraction nor the division:</p>
+<pre><code class="language-python">g=lambda a,b:sum(map(int,a+b+52*str(int(a)+int(b))))*6%53
+</code></pre>
+<p>It works modulo 53. Adding the digits of a+b 52 times is the same as subtracting them once, because 52 ≡ −1, and
+multiplying by 6 is the same as dividing by 9, because 6 × 9 = 54 ≡ 1. There are at most 50 carries, so the
+remainder is the answer. That's 57 bytes, against 59 for the shortest solution that divides by 9.</p>
 </li>
 <li>
-<p><strong>Letting the kingdoms fight.</strong> <a href="#problems/12/scoreboard">Bit Kingdoms</a> asks which byte of a 32-bit integer has the most
-set bits, with ties going to the lowest byte. <a href="#problems/12/scoreboard/gpt-6-astra-max-js">GPT-6 Astra's JavaScript</a>
-doesn't count the bits in each byte. It removes one set bit from each byte in turn, starting at the top, until none
-are left. The byte that runs out last wins. Since each round goes from the top byte down, a lower byte outlasts a
-higher one in a tie.</p>
-<p>This fits neatly into a few bit operations: rotate by 8 bits to bring the next byte to the top, clear its lowest set
-bit with x &amp; (x−1), and use the number of turns modulo 4 to identify the winner. The result is 50 bytes. The five GPT
-JavaScript solutions that count bits take 77 to 89. <a href="#problems/12/scoreboard/gpt-6-astra-max-cc">Astra's C++</a> does the
-reverse: each byte gains a bit in turn, and the first to fill up wins.</p>
+<p><strong>Comparing rows instead of finding a path.</strong> <a href="#problems/05/scoreboard">2×n matrix</a> asks how many blocked cells you
+have to clear to walk from the top-left to the bottom-right of a two-row grid, given as two strings of 0s and 1s.
+Most solutions work out the cheapest way to reach each cell, column by column.
+<a href="#problems/05/scoreboard/claude-opus-5.5-xhigh-py">Claude Opus 5.5's Python</a> walks greedily instead and lets string
+comparison choose the row:</p>
+<pre><code class="language-python">g=lambda*s:all(s)and(min(s)&gt;='01')+g('0'+min(s)[2:],max(s)[1:])
+</code></pre>
+<p>You always stand on a free cell, so the row you're in starts with 0, and <code>min</code> picks it. If the other row's cell is
+free too, you could switch rows at no cost, and <code>min</code> picks whichever row's next cell is free. If even that cell is
+blocked, <code>min(s)&gt;='01'</code> adds 1 for clearing it. Then both rows lose their first column, and the cell you step onto
+becomes <code>0</code>. That's 63 bytes. Claude Fable 5.2 and Gemini 4 Neon found the same idea, and the column-by-column
+solutions take 78 bytes or more.</p>
 </li>
 <li>
-<p><strong>Counting walls instead of paths.</strong> <a href="#problems/05/scoreboard">2×n matrix</a> asks how many blocked cells you have to clear
-to walk from the top-left to the bottom-right of a two-row grid. It looks like a shortest-path problem, but
-<a href="#problems/05/scoreboard/gpt-6-astra-max-hs">GPT-6 Astra's Haskell</a> counts walls. A blocked cell in each row forms a wall
-if the two cells are at most one column apart. You have to clear at least one cell from every wall, and walls that
-don't share a cell need separate clearances.</p>
-<p>The answer is the largest number of walls that share no cell. A greedy left-to-right pairing finds it. Haskell's
-<code>deleteFirstsBy</code> does exactly that pairing if you define equality as &quot;at most one column apart&quot;. It takes 71 bytes;
-the other GPT Haskell solutions work out the cheapest path column by column and take 80 or more.</p>
+<p><strong>The quaternion group in one number.</strong> <a href="#problems/09/scoreboard">Quaternions</a> asks for the product of a string of
+1, i, j and k, such as <code>ijkj</code>. The usual shortcut numbers 1, i, j and k from 0 to 3. Then XOR gives the letter of a
+product, and only its sign needs a lookup table. Many models drop the table: they number all eight results, ±1,
+±i, ±j and ±k, from 0 to 7, and multiply with x ∘ y = x + 3ˣ·y (mod 8). Bit 2 holds the sign. 3ˣ mod 8 is 1 when
+x is even and 3 when x is odd, and that twist is what makes i × j = −(j × i).
+<a href="#problems/09/scoreboard/gpt-6.2-sol-max-py">GPT-6.2 Sol's Python</a> does it in 67 bytes; the next shortest Python
+takes 74:</p>
+<pre><code class="language-python">g=lambda a:'----1kji'[reduce(lambda n,c:n-ord(c)%25*3**n&amp;7,a,4)::4]
+</code></pre>
+<p><code>ord(c)%25</code> turns 1, i, j and k into 24, 5, 6 and 7. The code subtracts these steps, so modulo 8 the letters get
+the numbers 0, 3, 2 and 1, their positions in <code>1kji</code>. Starting at 4 instead of 0 multiplies the whole product by
+−1, which suits the output: <code>'----1kji'[n::4]</code> takes every fourth character from position n, giving one character
+for n from 4 to 7 and two, a minus sign first, for n from 0 to 3.</p>
 </li>
 <li>
-<p><strong>Queens in the complex plane.</strong> In <a href="#problems/03/scoreboard">Surviving queens</a>, a queen survives if no other queen
-shares its row, column or diagonal. Three GPT models place the queen in row r and column c at the complex number
-r + ci. Then two queens attack each other exactly when the fourth power of their difference is real.</p>
-<p>The directions a queen can move are the eight multiples of 45°. Taking the fourth power multiplies angles by four,
-putting exactly those directions on the real axis, at 0° or 180°. <a href="#problems/03/scoreboard/gpt-5.5-xhigh-py">GPT-5.5's version</a>
-takes 110 bytes in Python.</p>
+<p><strong>Three exponents from one counter.</strong> <a href="#problems/08/scoreboard">(−5)-Smooth Numbers</a> asks for the first n positive
+numbers of the form (−2)ˣ(−3)ʸ(−5)ᶻ, that is, numbers 2ˣ3ʸ5ᶻ with x+y+z even. Most solutions build them with
+nested loops or by growing a set, then sort. <a href="#problems/08/scoreboard/gpt-6.2-astra-max-py">GPT-6.2 Astra's Python</a>
+gets them all from powers of 4:</p>
+<pre><code class="language-python">g=lambda n:sorted(4**i%(2**999-5)%(2**49-3)for i in range(7000))[:n]
+</code></pre>
+<p>Modulo 2⁹⁹⁹−5, each factor 2⁹⁹⁹ in 4ⁱ = 2²ⁱ turns into a 5. Modulo 2⁴⁹−3, each 2⁴⁹ turns into a 3. So, writing
+2i = 999z + 49y + x, 4ⁱ becomes 5ᶻ3ʸ2ˣ. Since 2i is even and 999 and 49 are odd, x+y+z is even too: the sign
+condition comes for free. When a product doesn't fit below a modulus, the reduction scrambles it, but every
+scrambled value is above 7 × 10¹⁰, and the largest number the problem needs is 10⁹. That's 68 bytes; the other
+Python solutions take 70 or more.</p>
 </li>
 <li>
-<p><strong>A table in one number.</strong> <a href="#problems/32/scoreboard">Parenthesis sequence (hard)</a> counts the balanced subsequences in a
-string of parentheses. The usual approach keeps a table: for each depth, how many subsequences have we found so far
-that end there? Every GPT model's Python packs that table into one big integer, with one digit per depth.</p>
-<p>In base 9⁹, multiplying by 9⁹+1 keeps each count at its current depth and also copies it one level deeper. That's the
-whole update for <code>(</code>. For <code>)</code>, do the same multiplication and then divide by 9⁹, copying the counts one level up
-instead. Rounding down discards exactly the subsequences that would close more parentheses than they opened.
-The lowest digit holds the answer, apart from the empty subsequence, which we subtract:
-<a href="#problems/32/scoreboard/gpt-6-astra-max-py">61 bytes</a>.</p>
+<p><strong>Counting each neighbour twice.</strong> <a href="#problems/04/scoreboard">Game of Life</a> asks for the next generation of a board.
+A cell lives on if it has three live neighbours, or two if it's already alive. Most solutions add up each 3×3 block
+and compare the sum with 3 and 4. <a href="#problems/04/scoreboard/gpt-6.2-astra-max-py">GPT-6.2 Astra's Python</a> counts
+the block twice:</p>
+<pre><code class="language-python">g=lambda a,p=['z'*99]:[a&lt;p and`g(zip(*r))`[1::3]or+(4&lt;`r*2`.count('1',4)&lt;8)for r in zip(a,p+a,a[1:]+p)]
+</code></pre>
+<p>Each block r is a nested tuple of characters with the cell itself first. In the text form of <code>r*2</code>, the block
+written out twice, that cell's character is at index 3, so counting 1s from index 4 skips it in the first copy
+only. For a cell c with N live neighbours, the count is 2N+c, and 4 &lt; 2N+c &lt; 8 is exactly the rule: 5 or 7 for a
+live cell with two or three neighbours, 6 for an empty cell with three.</p>
+<p>One lambda handles both directions. Called with the rows, it zips each row and its neighbours into columns, calls
+itself on them and reads the digits back out of the resulting list's text with <code>[1::3]</code>. Called with those
+columns, it counts. The test <code>a&lt;p</code> tells the two cases apart: Python 2 compares a list of strings with <code>['zzz…']</code>
+string by string, but ranks any tuple above any string. The z's also pad the edges, since they aren't 1s. <code>zip</code>
+stops at its shortest string, though, so a top or bottom row more than 99 cells wide would come out cut short; the
+test boards are at most 66 wide. That's 103 bytes; GPT-6.2 Sol uses the same count in 108, and the other Python
+solutions take 121 or more.</p>
 </li>
 <li>
-<p><strong>One point instead of six faces.</strong> <a href="#problems/31/scoreboard">The Rolling Dice</a> asks whether a die is back in its
-starting orientation after each roll. Most solutions keep track of the faces. GPT-6 Astra's
-<a href="#problems/31/scoreboard/gpt-6-astra-max-py">Python</a> and <a href="#problems/31/scoreboard/gpt-6-astra-max-hs">Haskell</a> solutions
-follow one point on a sphere around the die instead. Choose a point that no nontrivial rotation
-of the die leaves in place, and it returns to its starting position exactly when the die does.</p>
-<p><a href="https://en.wikipedia.org/wiki/Stereographic_projection">Stereographic projection</a> maps the sphere to the complex
-plane. A roll in direction k, where k is one of 1, i, −1 or −i, becomes z → (z+k)/(1−z/k). Python can do this with
-ordinary complex arithmetic. The Haskell solution works modulo 37, using 6 for i because 6² = 36 ≡ −1, and multiplying
-by y³⁵ to divide by y. Every step is exact. Starting at 4, the point never visits a number below 4, so 4 ÷ z rounded
-down gives 1 when it returns to 4 and 0 otherwise. This takes 82 bytes; the other GPT Haskell solutions take 102 or
-more.</p>
+<p><strong>Raising the bar instead of counting letters.</strong> <a href="#problems/29/scoreboard">Cracking Caesar</a> asks you to decrypt a
+Caesar cipher, knowing that e is the most common letter in the plaintext. The usual approach counts the letters,
+finds the most common one and shifts every letter by its distance from e.
+<a href="#problems/29/scoreboard/claude-fable-5.2-xhigh-cc">Claude Fable 5.2's C++</a> and
+<a href="#problems/29/scoreboard/gemini-4-argon-high-cc">Gemini 4 Argon's</a>, both 93 bytes, never count the letters:</p>
+<pre><code class="language-cpp">int n,i;string g(string a){for(char&amp;x:n=i++/26,a)n-=x&gt;64&amp;&amp;(--x%32?:x+=26)^5;return n?g(a):a;}
+</code></pre>
+<p>Each call shifts every character after <code>@</code> back by one and subtracts 1 from n for each one that doesn't become e.
+<code>x&gt;64</code> isn't a real letter test: it would also shift <code>[</code> to <code>Z</code>, although only letters are encrypted. It works
+because the test messages contain only letters and punctuation that comes before <code>A</code>. n starts at i/26, where i
+counts the calls, and the function stops when n ends at exactly 0. In the first 26 calls, one full cycle of shifts,
+that only happens if every letter becomes e; in the next 26, if all but one do; and so on. So the first shift to
+meet the rising bar is the one with the most e's. Solutions that count the letters and then shift once take 121
+bytes or more. This one is slow, up to a few thousand recursive calls on the tests, but that costs no bytes.</p>
+</li>
+<li>
+<p><strong>Complex numbers, now common.</strong> Two ideas that only a few models had found when I first wrote this page are now in
+most models' Python and Ruby solutions.</p>
+<p>In <a href="#problems/03/scoreboard">Surviving queens</a>, a queen survives if no other queen shares its row, column or
+diagonal. Put the queen in row r and column c at the complex number r + ci. The directions a queen can move in are
+the eight multiples of 45°, and raising a difference to the fourth power multiplies its angle by four, which puts
+exactly those directions on the real axis. So two queens attack each other when (z − w)⁴ is real. In Ruby,
+comparing a complex number with <code>&lt;=&gt;</code> gives nil unless it's real, and 0 counts as true, so
+<a href="#problems/03/scoreboard/claude-fable-5.2-xhigh-rb">Claude Fable 5.2's Ruby</a> counts the queens x for which
+<code>q.one?{(it-x)**4&lt;=&gt;0}</code> holds: x itself, with a difference of 0, must be the only queen at a real fourth power.</p>
+<p>In <a href="#problems/31/scoreboard">The Rolling Dice</a>, a die is back in its starting orientation exactly when one
+well-chosen point on a sphere around it is back where it started: a point that no rotation of the die other than
+the identity leaves in place. So instead of tracking six faces, follow that point.
+<a href="https://en.wikipedia.org/wiki/Stereographic_projection">Stereographic projection</a> maps the sphere to the complex
+plane, and a roll in direction k, one of 1, i, −1 and −i, becomes z → (z+k)/(1−z/k).
+<a href="#problems/31/scoreboard/gpt-6.1-sol-max-rb">GPT-6.1 Sol's Ruby</a> takes 61 bytes:</p>
+<pre><code class="language-ruby">g=-&gt;a{z=2;a.bytes.map{z+=r=1i**(-it/3);z/=2-z/r;z==2?1:0}*''}
+</code></pre>
+<p><code>1i**(-it/3)</code> turns each letter's character code into its direction, and the two updates together apply the
+formula. Ruby does this arithmetic exactly, with fractions, so <code>z==2</code> can test for the starting point directly.
+Python's complex numbers are floating-point, so the Python versions test for something only the starting point
+satisfies, such as a real part above 2.</p>
 </li>
 </ul>
 <p>These solutions depend on finding and trying different ideas, then choosing the one that uses the fewest bytes.
@@ -484,39 +534,56 @@ model a reason to look for this sort of solution.</p>
 <h2 id="why-why-one-byte-can-be-hard-to-remove"><a href="#why/why-one-byte-can-be-hard-to-remove">Why one byte can be hard to remove</a></h2>
 <p>In a well-golfed program, the same piece of code often does several jobs. That's how it got so short. It's also why an
 apparently simple change can break something elsewhere.</p>
-<p>Here is <a href="#problems/16/scoreboard/gpt-6-astra-max-js">GPT-6 Astra's 81-byte JavaScript</a> for <a href="#problems/16/scoreboard">Nim</a>:</p>
-<pre><code class="language-js">function g(a){for(i=d=-1,x=eval(a.join('^'));x*d&lt;0;)d=2*(a[++i]&amp;x)-x;return[i,d]}
+<p>Here is <a href="#problems/16/scoreboard/gpt-6.1-sol-max-js">GPT-6.1 Sol's 79-byte JavaScript</a> for <a href="#problems/16/scoreboard">Nim</a>:</p>
+<pre><code class="language-js">function g(a){for(i=-1;(d=a[++i],d-=d^eval(a.join('^')))&lt;0;);return[d?i:--d,d]}
 </code></pre>
 <p>The algorithm is the usual one. Let x be the XOR of all the heap sizes. If x is 0, there's no winning move. Otherwise,
 find the first heap a for which a − (a XOR x) is positive, and take that many stones. But fitting it into this code
 requires a few tricks:</p>
 <ul>
-<li><code>eval(a.join('^'))</code> builds an expression such as <code>3^5^6</code> and evaluates it to get x.</li>
-<li><code>2*(a[++i]&amp;x)-x</code> is equal to a − (a XOR x), but only needs to refer to the heap once. That saves a temporary variable.
-Unless x is 0, the expression is never 0, and it's negative exactly when we're looking at the wrong heap.</li>
-<li><code>x*d&lt;0</code> keeps the loop running while d is negative. If x is 0, the product is 0 and we skip the loop entirely.</li>
-<li><code>i=d=-1</code> sets up three things at once: <code>++i</code> will start at heap 0, the first loop test will pass whenever x isn't 0,
-and if the loop never runs, <code>[i,d]</code> already contains the required answer, <code>[-1,-1]</code>.</li>
+<li><code>eval(a.join('^'))</code> builds an expression such as <code>3^5^6</code> and evaluates it to get x. It's inside the loop test, so it
+runs again for every heap. That wastes time but saves storing x in a variable.</li>
+<li>The test reads the next heap into d and turns it into d − (d XOR x) on the spot. Unless x is 0, that's never 0, and
+it's negative exactly when we're looking at the wrong heap.</li>
+<li>If x is 0, the first heap gives 0, so the loop stops with i at 0. Then <code>d?i:--d</code> gives −1, and because <code>--d</code> also
+changes d to −1, the second element is −1 as well.</li>
 </ul>
-<p><a href="#problems/16/scoreboard/gpt-5.5-xhigh-js">GPT-5.5's JavaScript</a> takes one more byte. It uses the same algorithm, <code>eval</code> and algebraic identity:</p>
-<pre><code class="language-js">function g(a){x=eval(a.join('^'));for(i=~!x;(y=(a[++i]&amp;x)*2-x)&lt;0;);return[i,y-!y]}
+<p><a href="#problems/16/scoreboard/gpt-6.2-astra-max-js">GPT-6.2 Astra's JavaScript</a> takes one byte less. It uses the same
+algorithm and tricks, but reads each heap in the loop body instead of the test:</p>
+<pre><code class="language-js">function g(a){for(i=d=0;(d-=d^eval(a.join('^')))&lt;0;)d=a[i++];return[--i,d||i]}
 </code></pre>
-<p>The difference is where it handles the losing position. The search starts at <code>~!x</code>, which is −2 when x is 0.
-The first heap it reads is then <code>a[-1]</code>. There is no such heap, so <code>y</code> comes out as 0 and the search stops.
-Finally, <code>y-!y</code> changes that 0 to −1, leaving any other value alone.</p>
-<p>You can't turn one version into the other with a small local edit. The special case is handled in different places,
-and the surrounding code relies on those choices. That's common in golfed code: a variable has two meanings, or an
-expression both updates the state and checks whether we're done. Remove a byte in one place and you may break an
-assumption somewhere else.</p>
-<p>The same thing happens in just 47 bytes of Python. <a href="#problems/11/scoreboard/gpt-5.5-xhigh-py">GPT-5.5's solution</a> for
-<a href="#problems/11/scoreboard">Drink Orders</a> computes the binomial coefficient C(D+P−1, P) modulo 2³¹−1:</p>
-<pre><code class="language-python">g=lambda a,b,c=2:b&lt;1or a*g(a+1,b-1,9)/b%~-c**31
+<p>That one move changes everything around it. The loop now tests before it has read a heap, so d starts at 0, and the
+first test computes 0 − (0 XOR x) = −x. That starts the loop when x isn't 0 and stops it at once when x is. Reading
+after testing leaves i one past the heap it found, so the result uses <code>--i</code>. In the losing position the loop never
+runs: <code>--i</code> turns 0 into −1, and <code>d||i</code> turns d's 0 into the same −1.</p>
+<p>Moving the read saves nine bytes in the test, <code>d=a[++i],</code>, and costs eight in the body, <code>d=a[i++]</code>. The new start,
+<code>i=d=0</code>, is a byte longer than <code>i=-1</code>, and the new result, <code>[--i,d||i]</code>, is a byte shorter than <code>[d?i:--d,d]</code>. The
+saving only appears when the start, the indexing and the losing case all change together. That's common in golfed
+code: a variable has two meanings, or an expression both updates the state and checks whether we're done. Remove a
+byte in one place and you may break an assumption somewhere else.</p>
+<p>Solutions of the same length can be just as far apart. These are
+<a href="#problems/09/scoreboard/gpt-6.2-astra-max-js">GPT-6.2 Astra's</a> and
+<a href="#problems/09/scoreboard/claude-fable-5.2-xhigh-js">Claude Fable 5.2's</a> 91-byte JavaScript for
+<a href="#problems/09/scoreboard">Quaternions</a>. Both use the mod 8 multiplication described above:</p>
+<pre><code class="language-js">function g(a){for(i=x=.5;y=1976%a.charCodeAt(i++);)x+=x%2*y;return(x&amp;4?'-':'')+'1kji'[x&amp;3]}
 </code></pre>
-<p>Each call multiplies by a and divides by b. To keep that division exact, we mustn't reduce modulo 2³¹−1 until the
-outermost call. The third parameter lets the code treat that call differently. <code>~-c**31</code> means c³¹−1: in the outermost
-call, c has its default value of 2, giving the required modulus. Recursive calls use c = 9, so their modulus is 9³¹−1,
-larger than anything they return. Taking the remainder there changes nothing. The base case, <code>b&lt;1or</code>, returns True,
-which acts as 1 in the multiplication.</p>
+<pre><code class="language-js">function g(a){for(i=t=0;c=a.charCodeAt(i++)%25;)t+=t%2*2*c-c;return[&quot;-&quot;[~t&amp;4]]+&quot;1kji&quot;[t&amp;3]}
+</code></pre>
+<p>In Astra's, the <code>.5</code> does three jobs:</p>
+<ul>
+<li><code>charCodeAt</code> drops the fraction from its argument, so i = .5, 1.5, 2.5, … reads characters 0, 1, 2, …. Past the
+end it returns NaN, and <code>1976%NaN</code> is NaN, which stops the loop.</li>
+<li><code>x%2</code> is .5 when x's whole part is even and 1.5 when it's odd, so x grows by y/2 or 3y/2: the factor of 3 for odd
+x, without computing a power. <code>1976%</code> gives 16, 86, 68 and 50 for 1, i, j and k. They're all even, so their halves
+are whole numbers, and modulo 8 those halves are 0, 3, 2 and 1, the positions in <code>1kji</code>.</li>
+<li><code>x&amp;4</code> and <code>x&amp;3</code> ignore the fraction.</li>
+</ul>
+<p>Fable's takes its steps from <code>%25</code> instead (24, 5, 6 and 7, and NaN at the end) and never lets t rise above 0. Then
+<code>t%2</code> is 0 or −1, so <code>t%2*2*c-c</code> multiplies c by −1 or −3: the same twist with the sign reversed. And
+<code>[&quot;-&quot;[~t&amp;4]]</code> is either <code>[&quot;-&quot;]</code> or <code>[undefined]</code>, and the second turns into an empty string when added to
+<code>&quot;1kji&quot;[t&amp;3]</code>.</p>
+<p>The two solutions do the same arithmetic in the same length, but neither can borrow a piece from the other: Astra's
+<code>.5</code> needs even steps, and Fable's sign trick needs t never to be positive.</p>
 <p>To make code like this shorter, the model has to understand why all the pieces work together. A change still has to
 leave the whole program correct.</p>
 <h2 id="why-knowing-when-to-keep-trying"><a href="#why/knowing-when-to-keep-trying">Knowing when to keep trying</a></h2>
